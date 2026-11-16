@@ -49,3 +49,18 @@
 /llms-full.txt
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=3600
+
+# The playground: plumlang's WebAssembly build (make wasm) and its worker.
+# Served as application/wasm, the browser compiles plum.wasm while it
+# downloads. The names carry no hash and the three files must match, so
+# they are revalidated on every load (a 304 when unchanged). No threads,
+# so no Cross-Origin-Embedder-Policy is needed.
+/playground/plum.wasm
+  Content-Type: application/wasm
+  Cache-Control: public, max-age=0, must-revalidate
+/playground/plum.js
+  Content-Type: text/javascript; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
+/playground/worker.js
+  Content-Type: text/javascript; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
