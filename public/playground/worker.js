@@ -24,16 +24,19 @@ const ready = createPlum().then(
   },
 );
 
-// Output goes to the page in batches: a message per line would flood it
-// when a program prints a lot.
+// Output goes to the page as it is written, but at most BURST messages
+// every WINDOW_MS: past that it is batched, so a program printing a lot
+// doesn't flood the page.
 const BATCH_BYTES = 8192;
-const BATCH_MS = 50;
+const WINDOW_MS = 50;
+const BURST = 20;
 const MAX_OUTPUT = 1 << 20; // characters shown per run; the rest is counted
 
 function runner(id) {
   let stream = "stdout";
   let buffer = "";
-  let last = performance.now();
+  let windowStart = performance.now();
+  let posts = 0;
   let shown = 0;
   let dropped = 0;
   const flush = () => {
@@ -41,7 +44,6 @@ function runner(id) {
       self.postMessage({ id, type: "output", stream, text: buffer });
       buffer = "";
     }
-    last = performance.now();
   };
   const write = (to) => (text) => {
     if (shown >= MAX_OUTPUT) {
@@ -57,7 +59,15 @@ function runner(id) {
     dropped += text.length - part.length;
     shown += part.length;
     buffer += part;
-    if (buffer.length >= BATCH_BYTES || performance.now() - last >= BATCH_MS) flush();
+    const now = performance.now();
+    if (now - windowStart >= WINDOW_MS) {
+      windowStart = now;
+      posts = 0;
+    }
+    if (posts < BURST || buffer.length >= BATCH_BYTES) {
+      flush();
+      posts++;
+    }
   };
   return {
     onStdout: write("stdout"),
