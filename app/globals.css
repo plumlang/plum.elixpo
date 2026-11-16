@@ -264,7 +264,7 @@
 :root {
   --pg-error: #f97066;
   --pg-warning: #f2c48d;
-  --pg-font: 0.85rem/1.65 var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pg-font: 0.85rem/1.65 var(--font-jetbrains-mono, ui-monospace), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .pg-editor {
@@ -299,6 +299,7 @@
 .pg-input {
   position: absolute;
   inset: 0;
+  box-sizing: border-box;
   margin: 0;
   padding: 1rem 1.1rem;
   border: 0;
