@@ -42,6 +42,10 @@ REQUIRED_FILES = (
     "llms-full.txt",
     "install.sh",
     "install.ps1",
+    # The playground: plumlang's WebAssembly build and the worker that runs it.
+    "playground/plum.js",
+    "playground/plum.wasm",
+    "playground/worker.js",
 )
 
 # Served as text, not downloaded or sniffed (public/_headers).
@@ -277,7 +281,7 @@ def check_llm_files(site: Path, docs_pages: set[str]) -> list[str]:
 
 
 def check_headers(site: Path) -> list[str]:
-    """public/_headers serves the installers and llms files as UTF-8 text."""
+    """public/_headers serves the installers and llms files as UTF-8 text, and plum.wasm as wasm."""
     problems: list[str] = []
     headers = (site / "_headers").read_text(encoding="utf-8") if (site / "_headers").is_file() else ""
     rules: dict[str, list[str]] = {}
@@ -291,6 +295,8 @@ def check_headers(site: Path) -> list[str]:
     for path in TEXT_FILES:
         if "content-type: text/plain; charset=utf-8" not in rules.get(path, []):
             problems.append(f"_headers does not serve {path} as text/plain; charset=utf-8")
+    if "content-type: application/wasm" not in rules.get("/playground/plum.wasm", []):
+        problems.append("_headers does not serve /playground/plum.wasm as application/wasm")
     return problems
 
 
