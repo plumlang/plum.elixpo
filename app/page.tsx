@@ -45,6 +45,13 @@ const reference = [
   { href: AGENTS_PAGE.path, title: "Coding agents", text: "llms.txt, llms-full.txt and an AGENTS.md snippet." },
 ];
 
+/** The install section's three cards. */
+const INSTALL_OPTIONS = [
+  { title: "Linux and macOS", code: INSTALL_COMMANDS.unix, lang: "bash", label: "sh" },
+  { title: "Windows", code: INSTALL_COMMANDS.windows, lang: "powershell", label: "PowerShell" },
+  { title: "From source, with a C11 compiler", code: INSTALL_COMMANDS.source, lang: "bash", label: "sh" },
+] as const;
+
 export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
@@ -194,19 +201,18 @@ export default function Home() {
         next={<NextLink href="/docs/install/">Install guide and settings</NextLink>}
         className="bg-card"
       >
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="min-w-0">
-            <h3 className="text-sm font-semibold">Linux and macOS</h3>
-            <CodeBlock code={INSTALL_COMMANDS.unix} lang="bash" label="sh" className="mb-0 mt-3" />
-          </div>
-          <div className="min-w-0">
-            <h3 className="text-sm font-semibold">Windows</h3>
-            <CodeBlock code={INSTALL_COMMANDS.windows} lang="powershell" label="PowerShell" className="mb-0 mt-3" />
-          </div>
-          <div className="min-w-0">
-            <h3 className="text-sm font-semibold">From source, with a C11 compiler</h3>
-            <CodeBlock code={INSTALL_COMMANDS.source} lang="bash" label="sh" className="mb-0 mt-3" />
-          </div>
+        {/* A subgrid on wide screens: the titles share one row and the blocks
+            the next, so all three cards line up and have the same height. */}
+        <div className="grid gap-x-4 gap-y-8 lg:grid-cols-3 lg:grid-rows-[auto_1fr] lg:gap-y-3">
+          {INSTALL_OPTIONS.map((option) => (
+            <div
+              key={option.title}
+              className="flex min-w-0 flex-col gap-3 lg:row-span-2 lg:grid lg:grid-rows-subgrid"
+            >
+              <h3 className="text-sm font-semibold lg:self-end">{option.title}</h3>
+              <CodeBlock code={option.code} lang={option.lang} label={option.label} className="my-0 h-full" />
+            </div>
+          ))}
         </div>
         <p className="mt-6 text-sm text-muted-foreground">
           Every build is listed with its checksum on{" "}

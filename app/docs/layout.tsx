@@ -1,4 +1,3 @@
-import { CopyButtons } from "@/components/copy-buttons";
 import { DocsSidebar } from "@/components/docs-sidebar";
 import { NAV } from "@/lib/docs";
 
@@ -9,7 +8,6 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         <DocsSidebar groups={NAV} />
       </aside>
       <div className="min-w-0">{children}</div>
-      <CopyButtons />
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import { highlight } from "@/lib/highlight";
+import { codeBlockInner, codeBlockLabel } from "@/lib/code-block";
 import { cn } from "@/lib/utils";
 
-/** A highlighted code block, rendered at build time. */
+/** A highlighted code block with a header and a copy button, rendered at build time. */
 export function CodeBlock({
   code,
   lang = "plum",
@@ -13,11 +13,12 @@ export function CodeBlock({
   label?: string;
   className?: string;
 }) {
+  const shown = codeBlockLabel(lang, label);
   return (
-    <div className={cn("code-block", className)} data-lang={label ?? lang}>
-      <pre>
-        <code className={`language-${lang}`} dangerouslySetInnerHTML={{ __html: highlight(code.trim(), lang) }} />
-      </pre>
-    </div>
+    <div
+      className={cn("code-block", className)}
+      data-lang={shown}
+      dangerouslySetInnerHTML={{ __html: codeBlockInner(code.trim(), lang, shown) }}
+    />
   );
 }

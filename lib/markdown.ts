@@ -8,7 +8,8 @@
 // tables that scroll on narrow screens.
 
 import { Marked, type Tokens } from "marked";
-import { escapeHtml, highlight } from "@/lib/highlight";
+import { codeBlockHtml } from "@/lib/code-block";
+import { escapeHtml } from "@/lib/highlight";
 
 export type Heading = { depth: number; text: string; id: string };
 
@@ -101,7 +102,7 @@ export function renderMarkdown(markdown: string, options: RenderOptions = {}): {
         const info = (lang ?? "").trim().split(/\s+/);
         const language = info[0] || "text";
         const label = language === "text" && info.includes("output") ? "Output" : language;
-        return `<div class="code-block" data-lang="${escapeHtml(label)}"><pre><code class="language-${escapeHtml(language)}">${highlight(text.replace(/\n$/, ""), language)}</code></pre></div>\n`;
+        return codeBlockHtml(text.replace(/\n$/, ""), language, label);
       },
       link({ href, title, tokens, raw }: Tokens.Link) {
         const target = resolveLink(href);

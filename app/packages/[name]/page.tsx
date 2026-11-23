@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { CodeBlock } from "@/components/code-block";
-import { CopyButtons } from "@/components/copy-buttons";
 import { JsonLd } from "@/components/json-ld";
 import { NextLink } from "@/components/next-link";
 import { renderMarkdown } from "@/lib/markdown";
@@ -150,7 +149,6 @@ export default async function PackagePage({ params }: Props) {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 md:py-16">
       <JsonLd data={structuredData} />
-      <CopyButtons />
       <nav aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
           {crumbs.map((crumb, i) => (

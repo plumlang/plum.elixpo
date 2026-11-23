@@ -2,36 +2,54 @@
 
 import { useEffect } from "react";
 
+const RESET_MS = 1600;
+
+/** Copies text, falling back to a selection where the Clipboard API is missing. */
+async function copyText(text: string, node: Node): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const selection = window.getSelection();
+    if (!selection) return false;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    return document.execCommand?.("copy") ?? false;
+  }
+}
+
 /**
- * Adds a "Copy" button to every code block on the page. The blocks are
- * rendered as static HTML, so the buttons are added once the page loads;
- * without JavaScript the code is still there to select.
+ * Makes every code block's copy button work (lib/code-block.ts renders them).
+ * One click handler on the document covers the blocks on every page, including
+ * the docs, which are static HTML. Mounted once, in the root layout.
  */
 export function CopyButtons() {
   useEffect(() => {
-    const added: HTMLButtonElement[] = [];
-    for (const block of document.querySelectorAll<HTMLElement>(".code-block")) {
-      if (block.dataset.lang === "Output" || block.querySelector(".copy-button")) continue;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className =
-        "copy-button rounded-md border border-white/20 bg-[var(--plum-deep)] px-2 py-1 font-mono text-[0.7rem] text-[var(--paper)] hover:border-white/40";
-      button.textContent = "Copy";
-      button.setAttribute("aria-label", "Copy this code");
-      button.addEventListener("click", async () => {
-        const code = block.querySelector("code")?.textContent ?? "";
-        try {
-          await navigator.clipboard.writeText(code);
-          button.textContent = "Copied";
-        } catch {
-          button.textContent = "Select and copy";
-        }
-        window.setTimeout(() => (button.textContent = "Copy"), 1600);
-      });
-      block.appendChild(button);
-      added.push(button);
-    }
-    return () => added.forEach((button) => button.remove());
+    const timers = new Map<HTMLElement, number>();
+    const onClick = async (event: MouseEvent) => {
+      const button = (event.target as Element | null)?.closest<HTMLElement>("[data-copy]");
+      const code = button?.closest(".code-block")?.querySelector("pre code");
+      if (!button || !code) return;
+      const ok = await copyText(code.textContent ?? "", code);
+      const text = button.querySelector(".copy-button__text");
+      button.toggleAttribute("data-copied", ok);
+      if (text) text.textContent = ok ? "Copied" : "Press Ctrl+C";
+      window.clearTimeout(timers.get(button));
+      timers.set(
+        button,
+        window.setTimeout(() => {
+          button.removeAttribute("data-copied");
+          if (text) text.textContent = "Copy";
+        }, RESET_MS),
+      );
+    };
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("click", onClick);
+      timers.forEach((id) => window.clearTimeout(id));
+    };
   }, []);
   return null;
 }
