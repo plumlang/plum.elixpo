@@ -39,6 +39,9 @@ yarn-error.log*
 # wrangler
 .wrangler/
 
+# Orchard's packages, read at build time (scripts/sync-orchard.mjs)
+/content/orchard.json
+
 # vercel
 .vercel
 
