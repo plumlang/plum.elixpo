@@ -2,18 +2,19 @@
 //
 // content/docs/ is the snapshot of plumlang's docs (scripts/sync-docs.mjs):
 // the spec is split into one page per numbered section, each stdlib module
-// is a page, and the error codes are one page. content/tour/ and
-// content/site/ are this site's own pages. Every page knows its file, so
+// is a page, the error codes are one page, and docs/reference.md (the whole
+// language on one page) is /docs/reference/ once plumlang has it.
+// content/tour/ and content/site/ are this site's own pages. Every page knows its file, so
 // it can link to it for editing, and its neighbours, for previous / next.
 
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, posix } from "node:path";
 import { firstParagraph, githubSlug, plainText, summarize } from "@/lib/markdown";
 import { REPO_URL } from "@/lib/site";
 
 const CONTENT = join(process.cwd(), "content");
 
-export type SectionId = "start" | "tour" | "language" | "stdlib" | "reference";
+export type SectionId = "start" | "tour" | "language" | "stdlib" | "tools" | "reference";
 
 export type DocPage = {
   /** Path segments under /docs/; [] is /docs/ itself. */
@@ -40,6 +41,8 @@ export type DocPage = {
   tocDepth: 2 | 3;
   /** A note shown with the title, like "Stage 5". */
   badge?: string;
+  /** One line under the title saying what the page is for. */
+  lead?: string;
 };
 
 export type NavGroup = { id: SectionId; title: string; items: { title: string; path: string }[] };
@@ -109,13 +112,14 @@ const overview: DocPage = {
   metaTitle: "Documentation",
   navTitle: "Overview",
   description:
-    "Plumlang's documentation: a beginner's tour, the language reference, the standard library and every error code, from the language's own specification.",
+    "Plumlang's documentation: install, a beginner's tour, the language reference, the standard library and every error code, from the language's own specification.",
   section: "start",
   eyebrow: "Documentation",
   source: { repo: "site", path: "app/docs/page.tsx" },
   markdown: "",
   shift: 0,
   tocDepth: 2,
+  lead: "Everything about Plumlang, in reading order: install it, learn it, then look things up.",
 };
 
 function sitePage(file: string, slug: string[], section: SectionId, eyebrow: string): DocPage {
@@ -134,10 +138,12 @@ function sitePage(file: string, slug: string[], section: SectionId, eyebrow: str
     markdown: body,
     shift: 0,
     tocDepth: 2,
+    lead: data.lead,
   };
 }
 
 const install = sitePage("install.md", ["install"], "start", "Get started");
+const agents = sitePage("agents.md", ["agents"], "reference", "Reference");
 
 // ---------------------------------------------------------------------------
 // The tour: content/tour/index.md, then NN-slug.md in order.
@@ -162,6 +168,7 @@ function tourPages(): DocPage[] {
       markdown: body,
       shift: 0,
       tocDepth: 2,
+      lead: data.lead,
     };
   };
   pages.push(make("index.md", ["tour"]));
@@ -195,6 +202,7 @@ const languageIndex: DocPage = {
   markdown: specParts.intro,
   shift: 0,
   tocDepth: 2,
+  lead: "The exact rules of the language: the specification, one section per page.",
 };
 
 const specPages: DocPage[] = specParts.sections.map(({ heading, body }) => {
@@ -278,6 +286,7 @@ const stdlibIndex: DocPage = {
   markdown: stdlibReadme.body,
   shift: 0,
   tocDepth: 2,
+  lead: "The modules built into plum: numbers, text, files, time, JSON, tasks, sockets and HTTP.",
 };
 
 const stdlibPages: DocPage[] = stdlibOrder.map((file) => {
@@ -324,13 +333,95 @@ const errorsPage: DocPage = {
   markdown: errors.body,
   shift: 0,
   tocDepth: 2,
+  lead: "Every compiler error code, with an example that causes it and the fix.",
 };
+
+// ---------------------------------------------------------------------------
+// The whole language on one page: docs/reference.md (plumlang#87), when the
+// snapshot has it. Until then there is no /docs/reference/.
+
+const REFERENCE_FILE = join(CONTENT, "docs", "reference.md");
+const referencePage: DocPage | undefined = existsSync(REFERENCE_FILE)
+  ? (() => {
+      const { title, body } = splitTitle(read("docs", "reference.md"));
+      return {
+        slug: ["reference"],
+        path: "/docs/reference/",
+        title: title || "Plumlang on one page",
+        metaTitle: "The whole language on one page",
+        navTitle: "On one page",
+        description: describe(body, "The whole Plumlang language on one page: syntax, types, functions, trees, modules, errors and tasks."),
+        section: "reference" as const,
+        eyebrow: "Reference",
+        source: { repo: "plumlang" as const, path: "docs/reference.md" },
+        markdown: body,
+        shift: 0,
+        tocDepth: 2 as const,
+        lead: "The whole language on one page, for a quick read or for a coding agent.",
+      };
+    })()
+  : undefined;
+
+/** The one-page reference, if the snapshot has docs/reference.md. */
+export const REFERENCE_PAGE = referencePage;
+
+// ---------------------------------------------------------------------------
+// Tools: the guides to Orchard, the language server, the REPL and the
+// WebAssembly build, each one page, when the snapshot has them.
+
+const TOOL_GUIDES: { file: string; slug: string; nav: string; metaTitle: string; lead: string }[] = [
+  {
+    file: "orchard.md",
+    slug: "orchard",
+    nav: "Packages (Orchard)",
+    metaTitle: "Orchard packages",
+    lead: "Find, add and publish packages with the plum command and the Orchard registry.",
+  },
+  {
+    file: "lsp.md",
+    slug: "lsp",
+    nav: "Language server",
+    metaTitle: "The language server",
+    lead: "plum lsp: errors as you type, hover, go to definition and completion in any editor.",
+  },
+  { file: "repl.md", slug: "repl", nav: "REPL", metaTitle: "The REPL", lead: "Type Plumlang at a prompt and see each result at once." },
+  {
+    file: "playground.md",
+    slug: "wasm",
+    nav: "WebAssembly",
+    metaTitle: "Plumlang in the browser",
+    lead: "Run Plumlang in a web page with the WebAssembly build, as the playground does.",
+  },
+];
+
+const toolPages: DocPage[] = TOOL_GUIDES.filter((guide) => existsSync(join(CONTENT, "docs", guide.file))).map((guide) => {
+  const { title, body } = splitTitle(read("docs", guide.file));
+  const shown = title || guide.nav;
+  return {
+    slug: ["tools", guide.slug],
+    path: `/docs/tools/${guide.slug}/`,
+    title: shown,
+    metaTitle: `${guide.metaTitle} · Tools`,
+    navTitle: guide.nav,
+    description: describe(body, shown),
+    section: "tools" as const,
+    eyebrow: "Tools",
+    source: { repo: "plumlang" as const, path: `docs/${guide.file}` },
+    markdown: body,
+    shift: 0,
+    tocDepth: 2 as const,
+    lead: guide.lead,
+  };
+});
 
 // ---------------------------------------------------------------------------
 
 const tour = tourPages();
 
-/** Every docs page, in reading order (previous / next follow it). */
+/**
+ * Every docs page, in reading order (previous / next follow it): install,
+ * learn, then the reference, ending with the page for coding agents.
+ */
 export const DOC_PAGES: DocPage[] = [
   overview,
   install,
@@ -339,7 +430,10 @@ export const DOC_PAGES: DocPage[] = [
   ...specPages,
   stdlibIndex,
   ...stdlibPages,
+  ...toolPages,
+  ...(referencePage ? [referencePage] : []),
   errorsPage,
+  agents,
 ];
 
 export const NAV: NavGroup[] = [
@@ -363,7 +457,14 @@ export const NAV: NavGroup[] = [
     title: "Standard library",
     items: [stdlibIndex, ...stdlibPages].map((p) => ({ title: p.navTitle, path: p.path })),
   },
-  { id: "reference", title: "Reference", items: [{ title: errorsPage.navTitle, path: errorsPage.path }] },
+  ...(toolPages.length > 0
+    ? [{ id: "tools" as const, title: "Tools", items: toolPages.map((p) => ({ title: p.navTitle, path: p.path })) }]
+    : []),
+  {
+    id: "reference",
+    title: "Reference",
+    items: [...(referencePage ? [referencePage] : []), errorsPage, agents].map((p) => ({ title: p.navTitle, path: p.path })),
+  },
 ];
 
 export const SECTION_TITLES: Record<SectionId, { title: string; path: string }> = {
@@ -371,12 +472,22 @@ export const SECTION_TITLES: Record<SectionId, { title: string; path: string }> 
   tour: { title: "Tour", path: "/docs/tour/" },
   language: { title: "Language reference", path: "/docs/language/" },
   stdlib: { title: "Standard library", path: "/docs/stdlib/" },
-  reference: { title: "Error codes", path: "/docs/errors/" },
+  tools: { title: "Tools", path: (toolPages[0] ?? stdlibIndex).path },
+  reference: { title: "Reference", path: (referencePage ?? errorsPage).path },
 };
 
 export const SPEC_SECTIONS = specPages;
 export const STDLIB_MODULES = stdlibPages;
 export const TOUR_PAGES = tour;
+export const ERRORS_PAGE = errorsPage;
+export const AGENTS_PAGE = agents;
+export const INSTALL_PAGE = install;
+export const LANGUAGE_INDEX = languageIndex;
+export const STDLIB_INDEX = stdlibIndex;
+export const TOOL_PAGES = toolPages;
+
+/** Where a page's Markdown copy is served: the page's URL plus index.md. */
+export const markdownPath = (page: DocPage) => `${page.path}index.md`;
 
 const byPath = new Map(DOC_PAGES.map((page) => [page.path, page]));
 
@@ -404,7 +515,9 @@ const repoPathToUrl = new Map<string, string>([
   ["docs/spec.md", languageIndex.path],
   ["docs/errors.md", errorsPage.path],
   ["docs/stdlib/README.md", stdlibIndex.path],
+  ...(referencePage ? [["docs/reference.md", referencePage.path] as [string, string]] : []),
   ...stdlibPages.map((p) => [p.source.path, p.path] as [string, string]),
+  ...toolPages.map((p) => [p.source.path, p.path] as [string, string]),
 ]);
 
 /** Where a GitHub anchor in docs/spec.md lives on the site: "#52-if" is on the Statements page. */

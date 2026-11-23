@@ -1,24 +1,36 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ChevronRight, SquarePen } from "lucide-react";
+import { CopyPageButton } from "@/components/copy-page";
+import { NextLink } from "@/components/next-link";
 import type { DocPage } from "@/lib/docs";
 import type { Heading } from "@/lib/markdown";
+import { jsonLd } from "@/lib/seo";
+import { LLMS_FULL_PATH } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export type Crumb = { name: string; path: string };
 
-/** Breadcrumbs, eyebrow, the page's one h1, and its lead. */
+/**
+ * Breadcrumbs, eyebrow, the page's one h1, its one-line purpose, and the
+ * actions every docs page opens with: the next page, "Copy for LLM" (the
+ * page's Markdown, embedded as JSON) and the link to llms-full.txt.
+ */
 export function DocHeader({
   crumbs,
   eyebrow,
   title,
   badge,
   lead,
+  next,
+  markdown,
 }: {
   crumbs: Crumb[];
   eyebrow: string;
   title: string;
   badge?: string;
   lead?: string;
+  next?: { path: string; title: string };
+  markdown: string;
 }) {
   return (
     <header className="border-b pb-8">
@@ -38,16 +50,27 @@ export function DocHeader({
           ))}
         </ol>
       </nav>
-      <p className="mt-6 font-mono text-xs uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+      <p className="mt-8 font-mono text-[0.68rem] font-medium uppercase tracking-[0.19em] text-primary">{eyebrow}</p>
+      <h1 className="mt-3 text-4xl font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
         {title}
         {badge && (
-          <span className="ml-3 inline-block translate-y-[-0.4em] rounded-full border px-2.5 py-0.5 align-middle font-mono text-[0.65rem] font-normal tracking-wide text-muted-foreground">
+          <span className="ml-3 inline-block translate-y-[-0.5em] rounded-full border px-2.5 py-0.5 align-middle font-mono text-[0.65rem] font-normal tracking-wide text-muted-foreground">
             {badge}
           </span>
         )}
       </h1>
       {lead && <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">{lead}</p>}
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        {next && <NextLink href={next.path}>Next: {next.title}</NextLink>}
+        <CopyPageButton />
+        <a
+          href={LLMS_FULL_PATH}
+          className="inline-flex h-10 items-center px-2 font-mono text-[0.75rem] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
+          llms-full.txt
+        </a>
+      </div>
+      <script type="application/json" id="llm-markdown" dangerouslySetInnerHTML={{ __html: jsonLd(markdown) }} />
     </header>
   );
 }

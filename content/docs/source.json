@@ -1,24 +1,48 @@
 {
   "sourceRepository": "https://github.com/plumlang/plumlang",
-  "sourceCommit": "18806f6d17963a4ea4a815d8d9a6b224e489003f",
-  "sourceCommittedAt": "2026-11-15T21:22:22+05:30",
+  "sourceCommit": "9e6dffaa344ce4d98f1e917484afafa3511aae94",
+  "sourceCommittedAt": "2026-11-16T15:26:53+05:30",
   "dirty": false,
   "files": [
     {
       "path": "docs/spec.md",
-      "sha256": "243fe9ddfca95d0ca1c922facf951c61ee96a549afeec29d9bfc7d8357153052"
+      "sha256": "8d22235c7d09f17c439a2c7d53ba66b8b4bf0f7d504d2dbfb07795c0142c57eb"
     },
     {
       "path": "docs/errors.md",
-      "sha256": "0be9d4deebebcecf58b6c994f9e7846af7260f8ceacb8aaebf5f73a905356be3"
+      "sha256": "6eead7c99720527535fa162e8da91925875c4ca8ceb28a9407d57c38c4c54316"
+    },
+    {
+      "path": "docs/reference.md",
+      "sha256": "5a12c9d9208e43ca36b788a7245af665c6c0291fd098a2ad8909d55ab6ac616e"
+    },
+    {
+      "path": "docs/orchard.md",
+      "sha256": "a85b8738c57e5e97c2b9f1ef1d9919004a05744300d1e24a04d046cb12bd0110"
+    },
+    {
+      "path": "docs/lsp.md",
+      "sha256": "aa37b018ce6cf09d8011ddf9c2d73cf8a2a09d027b167d581aa6189b30bd919f"
+    },
+    {
+      "path": "docs/repl.md",
+      "sha256": "ead0d0a7561bb23d35109ee68dfaeccf4a5cadd73f13a44417fff3932190dd66"
+    },
+    {
+      "path": "docs/playground.md",
+      "sha256": "a727a89bb55d78b201adfa7a35ea7875a5260af76756392d85c423fa03e78c76"
     },
     {
       "path": "docs/stdlib/README.md",
-      "sha256": "15b1a58195d7e3adc4070d1b2cb0e90b9a9dd894d5a08c6abc50dc46c5ef57ca"
+      "sha256": "7ff0b3437d1afd5e907a533db05e2074b5acbda54d7bc0f39f9714decbf3ef37"
     },
     {
       "path": "docs/stdlib/fs.md",
       "sha256": "8dab921c3f9be841dc2484b117b3afa1b9d7988bd5b4cd3ca48b3357b8d5a07b"
+    },
+    {
+      "path": "docs/stdlib/hash.md",
+      "sha256": "cb46d2fea2e06412bb9bf5667c9b1e6cffb5cc14b70d780fdbffa6de917e6342"
     },
     {
       "path": "docs/stdlib/io.md",
@@ -58,7 +82,7 @@
     },
     {
       "path": "docs/stdlib/os.md",
-      "sha256": "5f3e4112c4af8d04af362d17d7ff2911a9cbe0b8c3f5643d3509da582ed3c939"
+      "sha256": "f359eb37d4ced050d2c9b5507596502d56872687620e09fb9851b3f26d552fc5"
     },
     {
       "path": "docs/stdlib/str.md",
@@ -75,6 +99,16 @@
     {
       "path": "docs/stdlib/writing-a-module.md",
       "sha256": "407d1238778a5b72a1460efb92731070af7cb32640d324616a3180153bf286b3"
+    },
+    {
+      "path": "tools/install/install.ps1",
+      "sha256": "8861bb03815d33da6e7253c3a684a64db663504542f0a4bb676819416596d95c",
+      "servedAt": "/install.ps1"
+    },
+    {
+      "path": "tools/install/install.sh",
+      "sha256": "f1911b59ed2d3177c59e34f5c80510d47c289da7f0fa596e95dca4f5ef8db232",
+      "servedAt": "/install.sh"
     }
   ]
 }

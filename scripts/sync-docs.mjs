@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 // Copies Plumlang's documentation from a plumlang checkout into content/docs/
-// as a reviewed snapshot, and records the commit it came from.
+// as a reviewed snapshot, and records the commit it came from. When the
+// checkout has them, it also copies docs/reference.md (the whole language on
+// one page) and the installers in tools/install/ into public/, so the site
+// serves them at /install.sh and /install.ps1.
 //
 //   node scripts/sync-docs.mjs [path-to-plumlang]          refresh the snapshot
 //   node scripts/sync-docs.mjs [path-to-plumlang] --check  fail if it is stale
@@ -17,6 +20,7 @@ import { fileURLToPath } from "node:url";
 const REPOSITORY = "https://github.com/plumlang/plumlang";
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = join(SITE_ROOT, "content", "docs");
+const PUBLIC_DIR = join(SITE_ROOT, "public");
 
 const args = process.argv.slice(2);
 const check = args.includes("--check");
@@ -40,9 +44,16 @@ if (!existsSync(join(source, "docs", "spec.md"))) {
   fail(`${source} does not look like a plumlang checkout (no docs/spec.md)`);
 }
 
+// The tool guides (Orchard, the language server, the REPL, WebAssembly),
+// copied when the checkout has them; lib/docs.ts makes each a page.
+const TOOL_DOCS = ["docs/orchard.md", "docs/lsp.md", "docs/repl.md", "docs/playground.md"];
+
 // Which files make up the snapshot, relative to the plumlang repository.
+// docs/reference.md arrives with plumlang#87; until then it is skipped.
 function sourceFiles() {
   const files = ["docs/spec.md", "docs/errors.md"];
+  if (existsSync(join(source, "docs", "reference.md"))) files.push("docs/reference.md");
+  for (const path of TOOL_DOCS) if (existsSync(join(source, path))) files.push(path);
   const stdlib = join(source, "docs", "stdlib");
   for (const name of readdirSync(stdlib).sort()) {
     if (name.endsWith(".md")) files.push(`docs/stdlib/${name}`);
@@ -59,7 +70,18 @@ try {
   fail(`${source} is not a git checkout; the snapshot must record a commit`);
 }
 
-const dirty = git("status", "--porcelain", "--", "docs");
+// The installers (plumlang#33), copied byte for byte into public/. A checkout
+// without tools/install/ leaves public/ as it is.
+function installerFiles() {
+  const dir = join(source, "tools", "install");
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((name) => /^install\.(sh|ps1)$/.test(name))
+    .sort()
+    .map((name) => `tools/install/${name}`);
+}
+
+const dirty = git("status", "--porcelain", "--", "docs", "tools/install");
 if (dirty && !allowDirty) {
   fail(`docs/ in ${source} has uncommitted changes:\n${dirty}\nCommit them first, or pass --allow-dirty for a local preview.`);
 }
@@ -72,6 +94,15 @@ for (const path of files) {
   const target = path.replace(/^docs\//, "");
   expected.set(target, text);
   manifest.push({ path, sha256: createHash("sha256").update(text).digest("hex") });
+}
+
+/** public/ files from the checkout: site path -> bytes. */
+const installers = installerFiles();
+const expectedPublic = new Map();
+for (const path of installers) {
+  const bytes = readFileSync(join(source, path));
+  expectedPublic.set(path.replace(/^tools\/install\//, ""), bytes);
+  manifest.push({ path, sha256: createHash("sha256").update(bytes).digest("hex"), servedAt: `/${path.split("/").pop()}` });
 }
 const provenance = {
   sourceRepository: REPOSITORY,
@@ -113,10 +144,17 @@ if (check) {
     console.error(`removed upstream: content/docs/${path}`);
     problems++;
   }
+  for (const [name, bytes] of expectedPublic) {
+    const full = join(PUBLIC_DIR, name);
+    if (!existsSync(full) || !readFileSync(full).equals(bytes)) {
+      console.error(`${existsSync(full) ? "changed: " : "missing: "} public/${name}`);
+      problems++;
+    }
+  }
   if (problems > 0) {
     fail(`the snapshot differs from ${commit.slice(0, 12)}; run node scripts/sync-docs.mjs ${args.filter((a) => !a.startsWith("-")).join(" ") || "../plumlang"} and review the changes`);
   }
-  console.log(`content/docs/ matches plumlang ${commit.slice(0, 12)} (${files.length} files)`);
+  console.log(`content/docs/ matches plumlang ${commit.slice(0, 12)} (${files.length} files, ${installers.length} installers)`);
 } else {
   for (const path of stale) {
     rmSync(join(OUT_DIR, path));
@@ -131,5 +169,14 @@ if (check) {
       console.log(`${current === null ? "added   " : "updated "} content/docs/${path}`);
     }
   }
+  for (const [name, bytes] of expectedPublic) {
+    const full = join(PUBLIC_DIR, name);
+    const current = existsSync(full) ? readFileSync(full) : null;
+    if (current === null || !current.equals(bytes)) {
+      writeFileSync(full, bytes);
+      console.log(`${current === null ? "added   " : "updated "} public/${name}`);
+    }
+  }
+  if (installers.length === 0) console.log("no tools/install/ in the checkout: public/install.* left as they are");
   console.log(`content/docs/ is plumlang ${commit.slice(0, 12)}${dirty ? " (with uncommitted changes)" : ""}`);
 }

@@ -13,10 +13,14 @@
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Icons and the social image change rarely.
+# Icons and the social images change rarely.
 /og.png
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
-/plum.svg
+/og-docs.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/plum-mark.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/plum-pixel.svg
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 /icon-*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
@@ -28,3 +32,20 @@
   Cache-Control: public, max-age=3600
 /manifest.webmanifest
   Content-Type: application/manifest+json
+
+# The installers, shown as text in a browser and piped to a shell by
+# curl | sh and irm | iex. Short cache: a release can change them.
+/install.sh
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=300
+/install.ps1
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=300
+
+# The documentation for language models (llmstxt.org).
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600

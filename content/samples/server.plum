@@ -1,0 +1,12 @@
+seed net.http
+
+plant app = http.server()
+
+app.get("/hello/:name", (req) => http.text("Hello, {req.params["name"]}!"))
+app.get("/add", (req) => {
+    plant a = int(req.query.get("a") ?? "0")
+    plant b = int(req.query.get("b") ?? "0")
+    return http.json({"a": a, "b": b, "sum": a + b})
+})
+
+app.listen(8080)

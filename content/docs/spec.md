@@ -55,6 +55,14 @@ for p in planets {
 A Plumlang source file is UTF-8 text with the extension `.plum`. A byte
 order mark at the start is ignored. Line endings may be `\n` or `\r\n`.
 
+Code may nest up to 1000 deep: brackets, blocks, types and lambdas inside
+each other, with each operator of a chain like `a + b + c` counting one
+level. Deeper code is a compile error (E0218), never a crash. Other limits,
+each a compile error: a function, lambda or kind case has at most 255
+parameters (E0219); a tree has at most 255 fields with its parents'
+(E0429); a tree or trait extends trees and traits at most 32 deep (E0428),
+and never itself (E0427).
+
 ### 2.2 Comments
 
 A comment starts with `#` and runs to the end of the line.
@@ -574,7 +582,20 @@ A function body that is a single expression can use `=>`:
 branch square(x: int) -> int => x * x
 ```
 
-Functions can be called before their declaration in the same module.
+Functions can be called before their declaration in the same module. A
+function may use module variables declared anywhere in the module, but
+using one before its `plant` or `root` line has run (a call made above
+the declaration) is a runtime `Error`, not a value of the wrong type:
+
+```plum
+branch greet() -> str => "Hello, {name}"
+drop(greet())        # Error: a module variable was used before its `plant` line ran
+plant name = "Ada"
+drop(greet())        # Hello, Ada
+```
+
+Using a module variable above its declaration outside a function is a
+compile error (E0303).
 
 ### 6.2 Default and named arguments
 
@@ -603,7 +624,7 @@ Functions are values. A lambda is written `(params) => expression` or
 ```plum
 plant double = (x: int) => x * 2
 plant evens = numbers.filter((n) => n % 2 == 0)
-plant sorted = people.sort_by((p) => p.age)
+plant sorted = people.sorted_by((p) => p.age)
 ```
 
 Lambda parameter types can be left out when the context gives them, as in
@@ -693,8 +714,9 @@ tree Temperature {
 
 Tree objects are reference values: assigning or passing one shares the same
 object, and changes through one name are seen through every name. Every
-other value in Plumlang is copied (section 11). Two names refer to the same
-object when `a is b`.
+other value in Plumlang is copied (section 11). For a tree without
+`equals`, `a == b` asks whether two names refer to the same object
+(section 4.5).
 
 ### 8.4 Inheritance
 
@@ -838,7 +860,9 @@ Shape.Rect(2.0, 3.0)`), and they print as written: `Direction.North`,
 
 Every `.plum` file is a module. Its top-level statements run once, in order,
 the first time it is imported, or when it is the program being run. A
-program needs no `main` function.
+program needs no `main` function. A module's functions exist before its
+first statement runs; its variables exist once their declaration has run
+(section 6.1).
 
 ### 9.2 seed
 
@@ -870,15 +894,33 @@ it. A file may be named like a keyword (`seed ./models/plant`).
 ### 9.3 Packages
 
 A directory with a `plum.toml` is a package; its `entry` file is the
-program, so `plum run my-project` runs it. Third-party packages are a
-post-1.0 feature.
+program, so `plum run my-project` runs it.
 
 ```toml
 [package]
 name = "weather-api"
 version = "0.1.0"
 entry = "main.plum"
+lib = "lib.plum"          # what `seed weather_api` imports (default: entry)
+
+[dependencies]
+colors = "^1.0"
 ```
+
+Packages published on Orchard, Plumlang's registry, are added with
+`plum add NAME` and seeded by name. A name that isn't a standard module
+(nor under one, like `net.x`) is a package: `seed colors` imports the
+package's `lib` file, and `seed colors.palette.dark` its file
+`palette/dark.plum`. A `-` in a package's name is written `_` in `seed`
+(`seed weather_api` for `weather-api`). The module's name is the last part,
+as for other modules.
+
+A module may seed only the packages its own `plum.toml` lists under
+`[dependencies]` (E0908); which version is used comes from the project's
+`plum.lock`, and a declared package that isn't installed is E0909. The
+project is the nearest directory with a `plum.toml` above the file being
+run. Version ranges, the lock file and the commands are described in
+[orchard.md](orchard.md).
 
 ### 9.4 Visibility
 
@@ -963,9 +1005,9 @@ and `AssertError`. The errors the language itself raises are these:
 | `IndexError` | a list or string index or slice out of range; `pop()` on an empty list; `insert`/`remove_at` out of range |
 | `KeyError` | `m[k]` for a key not in the map |
 | `ParseError` | `int(text)` or `float(text)` of text that isn't a number |
-| `ValueError` | `byte(n)` out of 0 to 255; an int power with a negative exponent; a shift count out of 0 to 63; a format that doesn't fit the value |
+| `ValueError` | `byte(n)` out of 0 to 255; an int power with a negative exponent; a shift count out of 0 to 63; a format that doesn't fit the value; a `str` or list larger than it may be (11.4) |
 | `AssertError` | `assert(condition)` when the condition is `bad` |
-| `Error` | too much recursion |
+| `Error` | too much recursion; a module variable used before its declaration ran (6.1) |
 
 ## 11. Values and memory
 
@@ -1029,8 +1071,11 @@ leak check: 2 objects are still alive in reference cycles:
 
 No Plumlang program can read or write memory it does not own: every index
 is checked, there are no raw pointers, and objects are never used after
-they are freed. A program can run out of memory, which ends it with a
-runtime error. Values may nest as deep as memory allows: comparing,
+they are freed. A `str` holds at most 1 GiB (2^30 bytes) and a list at
+most 2^27 (134,217,728) items; making a larger one (with `+`, `repeat`,
+`join`, `push`...) throws a `ValueError` before any memory is taken. A
+program that runs out of memory otherwise ends with `plum: error: out of
+memory` and exit code 1. Values may nest as deep as memory allows: comparing,
 copying and freeing them doesn't recurse in the runtime, and printing
 stops at a depth (section 3.2.1).
 
@@ -1173,13 +1218,73 @@ plum run --mem-stats program.plum   # ...and print the memory it used (11.5)
 plum program.plum [args...]         # the same
 plum check program.plum             # check for errors without running
 plum test                           # run tests (Stage 5)
-plum fmt                            # format source files (Stage 6)
-plum                                # interactive prompt (Stage 6)
+plum fmt files-or-directories...    # format source files in place (14.1)
+plum fmt --check paths...           # ...change nothing; list files that would change
+plum fmt -                          # format standard input to standard output
+plum                                # interactive prompt, on a terminal (14.2)
+plum repl                           # the interactive prompt, also with piped input
+plum lsp                            # the language server, for editors (docs/lsp.md)
 ```
 
 Exit codes: 0 success, 1 the program failed (compile or runtime error, or
 `exit(1)`), 2 the command was used wrongly, 3 a source file could not be
 read.
+
+### 14.1 Formatting
+
+`plum fmt` gives source code one canonical layout. It formats the files it
+is given, and every `.plum` file under the directories it is given;
+`--check` changes nothing, lists the files that would change and exits 1 if
+there are any; `--stdout` writes the result to standard output instead of
+the file. A file with syntax errors is reported and left as it is (exit 1).
+
+The layout:
+
+- four spaces per level; `{` ends its line and `}` starts its own;
+- one space around binary operators and after commas, none around `..`;
+- at most one blank line between statements, none at the start or end of a
+  block, and one before and after a top-level `branch`, `tree`, `trait` or
+  `kind` that takes more than one line;
+- a list, map, call, parameter list or kind that the source spreads over
+  several lines gets one item per line, with a trailing comma (kind cases
+  go without); one on a single line stays on one line. An `if` expression
+  over several lines puts each branch on lines of its own;
+- literals keep their spelling (`0xFF`, `1_000`, escapes, `"""` strings,
+  `true`), and parentheses the source wrote are kept;
+- a comment on a line of its own stays on a line of its own, before what
+  follows it; one after code stays after that code, and trailing comments
+  on neighbouring lines are lined up.
+
+Formatting never changes what a program means, and formatting a formatted
+file changes nothing.
+
+### 14.2 The interactive prompt
+
+`plum` with no arguments, when standard input is a terminal, starts a REPL;
+with piped input it prints the help instead (`plum repl` reads piped input
+as entries, without prompts). Each entry, a line, or several lines while a
+bracket is open, a line ends with an operator, `,` or `=>`, or a `"""`
+string is open, is checked and run at once, as if it were the next part of
+one program:
+
+- What an entry declares (variables, functions, trees, traits, kinds and
+  `seed` imports) is there for the entries after it. An entry may declare
+  a name again; the new declaration hides the old one from then on, while
+  code written before keeps the old one.
+- An entry that is one expression prints its value as `drop` would (an
+  object through its `to_str`) and its type: `= 42 : int`. A `none` value
+  prints nothing. Such an expression is not an unused value (5.7).
+- An entry with a compile error or a runtime error reports it and leaves
+  nothing it declared behind; what earlier entries made is kept. Imported
+  files are loaded and run once, by the first entry that imports them.
+- Tasks run while an entry runs, and the entry ends when its own code
+  does; tasks still running carry on while later entries run (12).
+- `exit(n)` ends the session with exit code `n`; otherwise it ends with 0
+  at the end of the input, `:quit` or Ctrl-D.
+
+Commands start with `:`: `:help`, `:type expr` (the expression's type,
+without running it), `:load file.plum` (run a file's code as an entry),
+`:reset` (forget every declaration) and `:quit` (or `:q`).
 
 ## 15. Changes from the Python prototype
 

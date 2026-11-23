@@ -1,0 +1,18 @@
+# count.plum: lines and words in each file named on the command line
+seed fs
+seed os
+
+plant files = os.args()
+if len(files) == 0 {
+    drop("usage: plum run count.plum FILE...")
+    exit(2)
+}
+
+for path in files {
+    try {
+        plant text = fs.read(path)
+        drop("{path}: {len(text.lines())} lines, {len(text.split())} words")
+    } catch e: IOError {
+        drop("{path}: {e.message}")
+    }
+}

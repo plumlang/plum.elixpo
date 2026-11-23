@@ -1,0 +1,7 @@
+plant basket = ["plum", "pear", "fig"]
+
+for fruit in basket {
+    if fruit != "pear" and not fruit.starts_with("x") {
+        drop("I like {fruit}s")
+    }
+}

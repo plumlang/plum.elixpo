@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Plumlang mark</title>
+  <!-- stem -->
+  <path d="M128 70 C128 54 132 42 142 32" fill="none" stroke="#B5701E" stroke-width="9" stroke-linecap="round"/>
+  <!-- leaf -->
+  <path d="M138 44 C150 22 182 18 204 28 C194 50 166 60 138 44 Z" fill="#18A466"/>
+  <!-- fruit -->
+  <circle cx="128" cy="150" r="84" fill="#5B2A86"/>
+  <!-- suture: the plum's seam, drawn as an open bracket -->
+  <path d="M128 72 C100 104 100 196 128 228" fill="none" stroke="#3A2150" stroke-width="8" stroke-linecap="round"/>
+  <!-- highlight -->
+  <path d="M170 100 C186 112 194 130 194 148" fill="none" stroke="#8E5CC2" stroke-width="10" stroke-linecap="round"/>
+</svg>

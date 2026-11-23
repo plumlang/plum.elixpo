@@ -1,0 +1,7 @@
+branch find_age(name: str) -> int? {
+    plant ages = {"ada": 36, "grace": 45}
+    return ages.get(name)
+}
+
+plant age = find_age("bob")
+drop(age + 1)

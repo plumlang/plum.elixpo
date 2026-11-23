@@ -2,16 +2,16 @@
 title: A tour of Plumlang
 nav: Introduction
 description: A step-by-step introduction to Plumlang for beginners, from printing a line to a web server, with a small runnable program on every page.
+lead: Learn the language in eleven short steps, each with programs you can run.
 ---
 
-This tour introduces Plumlang one idea at a time. Each step is a short page
-with small, complete programs and the output they print. You don't need to
-have programmed before, though it helps to know what a variable is.
+Each step is one idea, with small complete programs and the output they
+print. No programming experience is assumed.
 
-Plumlang is a small, statically typed language. Its keywords keep a garden
-theme: you `plant` a variable, `drop` a value on the screen, grow a `branch`
-(a function) and a `tree` (a class), and `seed` a module into your program.
-Everything else reads like plain English: `and`, `or`, `not`, `if`, `for`.
+The keywords keep a garden theme: you `plant` a variable, `drop` a value on
+the screen, grow a `branch` (a function) and a `tree` (a class), and `seed`
+a module. Everything else reads like English: `and`, `or`, `not`, `if`,
+`for`.
 
 ## How to follow along
 
@@ -19,11 +19,9 @@ Everything else reads like plain English: `and`, `or`, `not`, `if`, `for`.
 `.plum`, and run it:
 
 ```bash
-plum run hello.plum
+plum check hello.plum   # find mistakes, run nothing
+plum run hello.plum     # run it
 ```
-
-`plum check hello.plum` looks for mistakes without running the program. A
-[playground](/playground/) that runs Plumlang in your browser is on its way.
 
 ## The steps
 
@@ -40,5 +38,5 @@ plum run hello.plum
 11. [A web server](/docs/tour/web-server/): `net.http` in a few lines.
 
 The tour shows the common path. The [language reference](/docs/language/)
-is the full and exact description of the language, and the
-[standard library](/docs/stdlib/) documents every module.
+has the exact rules, and the [standard library](/docs/stdlib/) documents
+every module.

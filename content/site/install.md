@@ -1,56 +1,89 @@
 ---
-title: Download and install
+title: Install Plumlang
 nav: Install
-metaTitle: Download and install Plumlang
-description: How to install Plumlang. Download the plum binary from GitHub Releases or build it from source with a C11 compiler; one-line installers are coming soon.
+metaTitle: Install Plumlang
+description: Install Plumlang with one command, curl | sh on Linux and macOS or irm | iex on Windows, or build plum from source with a C11 compiler and make.
+lead: Put the plum binary on your PATH with one command on Linux, macOS or Windows.
 ---
 
 Plumlang is one program, `plum`, with no dependencies: the compiler, the
-virtual machine and the whole standard library are inside it. Installing
-Plumlang means putting that one file on your `PATH`.
+virtual machine and the standard library are all inside it.
 
-> **Status: pre-alpha.** The language is being built in the open, stage by
-> stage; see the [roadmap](https://github.com/plumlang/plumlang/issues/36).
-> Programs and the standard library can still change between versions.
+## Linux and macOS
 
-## Download a release
+```bash
+curl -fsSL https://github.com/plumlang/plumlang/releases/latest/download/install.sh | sh
+```
 
-Releases of Plumlang are published on
-[GitHub Releases](https://github.com/plumlang/plumlang/releases), with a
-`plum` binary for each platform:
+The script installs `plum` into `~/.plum/bin` and prints the line to add to
+your shell profile if that folder isn't on your `PATH`. Builds: Linux x86_64,
+arm64 and riscv64 (static, any distribution), and macOS 11 or later (one
+universal binary for Apple silicon and Intel).
 
-1. Open the [releases page](https://github.com/plumlang/plumlang/releases)
-   and download the archive for your system.
-2. Unpack it and move `plum` (`plum.exe` on Windows) to a folder on your
-   `PATH`.
-3. Check that it works:
+## Windows
+
+In PowerShell:
+
+```powershell
+irm https://github.com/plumlang/plumlang/releases/latest/download/install.ps1 | iex
+```
+
+The script installs `plum.exe` into `%LOCALAPPDATA%\Plumlang\bin` and adds
+that folder to your user `PATH`; open a new terminal to use it. Builds: x64
+and ARM64.
+
+## Check it
 
 ```bash
 plum version
 ```
 
-Until the first tagged release is out, build `plum` from source as below.
+Both installers check the download against the release's `SHA256SUMS` before
+installing anything, and change nothing outside the install folder (on
+Windows, they also add it to your `PATH`). The same scripts are served from
+this site, at [plum.elixpo.com/install.sh](/install.sh) and
+[plum.elixpo.com/install.ps1](/install.ps1).
 
-## One-line installers
+## Settings
 
-Coming soon. Signed release builds for Linux, macOS and Windows, with
-`install.sh`, `install.ps1`, Homebrew and winget, are tracked in
-[plumlang#33](https://github.com/plumlang/plumlang/issues/33).
+Set these environment variables before running an installer:
+
+| Variable | Default | What it sets |
+|---|---|---|
+| `PLUM_VERSION` | the newest release | The version to install, such as `0.1.0`. |
+| `PLUM_INSTALL` | `~/.plum`; on Windows `%LOCALAPPDATA%\Plumlang` | Where to install. The binary goes in its `bin` folder. |
+
+```bash
+curl -fsSL https://github.com/plumlang/plumlang/releases/latest/download/install.sh | PLUM_VERSION=0.1.0 PLUM_INSTALL=/opt/plum sh
+```
+
+```powershell
+$env:PLUM_VERSION = "0.1.0"; irm https://github.com/plumlang/plumlang/releases/latest/download/install.ps1 | iex
+```
+
+To uninstall, delete the install folder.
+
+## Package managers
+
+| Manager | Command | Status |
+|---|---|---|
+| Homebrew | `brew install plumlang/tap/plum` | Coming soon, not published yet |
+| winget | `winget install Elixpo.Plumlang` | Coming soon, not published yet |
 
 ## Build from source
 
-You need a C11 compiler (GCC, Clang or MSVC) and `make`, or CMake. Nothing
-else: the TLS library Plumlang uses for HTTPS is included in the source.
+You need a C11 compiler (GCC, Clang or MSVC) and `make`. Nothing else: the
+TLS library used for HTTPS is included in the source.
 
 ```bash
 git clone https://github.com/plumlang/plumlang
 cd plumlang
 make                 # builds ./plum
-make test            # optional: runs the test suite
+make test            # optional: the test suite
 ./plum version
 ```
 
-On Windows with MSVC:
+With MSVC on Windows, use CMake:
 
 ```bat
 cmake -B build && cmake --build build --config Release
@@ -66,31 +99,22 @@ Save this as `hello.plum`:
 drop("Hello, world!")
 ```
 
-and run it:
+Check it, then run it:
 
 ```bash
+plum check hello.plum
 plum run hello.plum
 ```
 
-The `plum` command also checks programs without running them, and lists the
-standard library:
-
-```bash
-plum check hello.plum   # report every error, run nothing
-plum stdlib             # every standard module and its functions
-plum stdlib math        # one module
-plum help               # everything else
+```text output
+Hello, world!
 ```
-
-Next, take the [tour](/docs/tour/), or try Plumlang in the
-[playground](/playground/) once it opens.
 
 ## Licence
 
 Plumlang is source-available under the
-[Plumlang Commercial License 1.0](https://github.com/plumlang/plumlang/blob/main/LICENSE).
-It is free for personal, educational, research and other non-commercial use,
-and free to evaluate for 60 days. Commercial use, redistribution and hosted
-services need a commercial licence: write to
+[Plumlang Commercial License 1.0](https://github.com/plumlang/plumlang/blob/main/LICENSE):
+free for personal, educational, research and other non-commercial use, and
+free to evaluate for 60 days. Commercial use needs a licence:
 [hello@elixpo.com](mailto:hello@elixpo.com). Programs you write in Plumlang
 are yours.
