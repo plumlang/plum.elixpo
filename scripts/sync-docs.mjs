@@ -44,11 +44,16 @@ if (!existsSync(join(source, "docs", "spec.md"))) {
   fail(`${source} does not look like a plumlang checkout (no docs/spec.md)`);
 }
 
+// The tool guides (Orchard, the language server, the REPL, WebAssembly),
+// copied when the checkout has them; lib/docs.ts makes each a page.
+const TOOL_DOCS = ["docs/orchard.md", "docs/lsp.md", "docs/repl.md", "docs/playground.md"];
+
 // Which files make up the snapshot, relative to the plumlang repository.
 // docs/reference.md arrives with plumlang#87; until then it is skipped.
 function sourceFiles() {
   const files = ["docs/spec.md", "docs/errors.md"];
   if (existsSync(join(source, "docs", "reference.md"))) files.push("docs/reference.md");
+  for (const path of TOOL_DOCS) if (existsSync(join(source, path))) files.push(path);
   const stdlib = join(source, "docs", "stdlib");
   for (const name of readdirSync(stdlib).sort()) {
     if (name.endsWith(".md")) files.push(`docs/stdlib/${name}`);
