@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { DOC_PAGES, lastModified, SITE_CONTENT_DATE } from "@/lib/docs";
+import { PACKAGES, REGISTRY_DATE, isoDay, latestVersion, packagePath } from "@/lib/orchard";
 import { absoluteUrl } from "@/lib/site";
 
 // Rendered once at build time into out/sitemap.xml (output: "export"). It
@@ -23,5 +24,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: priority(page.path),
     })),
     { url: absoluteUrl("/playground/"), lastModified: SITE_CONTENT_DATE, changeFrequency: "monthly", priority: 0.5 },
+    // Orchard: the package list, and a page per package (none if the
+    // registry couldn't be read at build time).
+    { url: absoluteUrl("/packages/"), lastModified: REGISTRY_DATE ?? SITE_CONTENT_DATE, changeFrequency: "daily", priority: 0.6 },
+    ...PACKAGES.map((pkg) => ({
+      url: absoluteUrl(packagePath(pkg.name)),
+      lastModified: isoDay(latestVersion(pkg)?.published ?? "") ?? REGISTRY_DATE ?? SITE_CONTENT_DATE,
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    })),
   ];
 }
