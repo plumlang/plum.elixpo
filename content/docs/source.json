@@ -1,7 +1,7 @@
 {
   "sourceRepository": "https://github.com/plumlang/plumlang",
-  "sourceCommit": "9e6dffaa344ce4d98f1e917484afafa3511aae94",
-  "sourceCommittedAt": "2026-11-16T15:26:53+05:30",
+  "sourceCommit": "ccfa9c909234e080e2e6f4a02fcf211b7405d4d2",
+  "sourceCommittedAt": "2026-11-23T20:46:17+05:30",
   "dirty": false,
   "files": [
     {
@@ -98,7 +98,7 @@
     },
     {
       "path": "docs/stdlib/writing-a-module.md",
-      "sha256": "407d1238778a5b72a1460efb92731070af7cb32640d324616a3180153bf286b3"
+      "sha256": "ea283dde75589578c84eefe776156260e73b23236e400d24249352b5d632ebe6"
     },
     {
       "path": "examples/bank.plum",
@@ -117,13 +117,17 @@
       "sha256": "8bdf5cb8c1adb29fd4e24f65f848a3c77221769afdd6d102720dff6cb4fe35d8"
     },
     {
+      "path": "examples/wordcount.plum",
+      "sha256": "63150f39a139b04daf4d433d8ab9b587cc5b75f8d7b86f6ac5100999ff9fdf2a"
+    },
+    {
       "path": "tools/install/install.ps1",
-      "sha256": "8861bb03815d33da6e7253c3a684a64db663504542f0a4bb676819416596d95c",
+      "sha256": "40d263591bfa350a612ad10420a45af821b7f928424a569367fbb40c36d87e86",
       "servedAt": "/install.ps1"
     },
     {
       "path": "tools/install/install.sh",
-      "sha256": "f1911b59ed2d3177c59e34f5c80510d47c289da7f0fa596e95dca4f5ef8db232",
+      "sha256": "9ff9a1ad65cfbab7b5fa7992fecdc2245ecb9fe359ecdd2138b520b28ecb7b94",
       "servedAt": "/install.sh"
     }
   ]

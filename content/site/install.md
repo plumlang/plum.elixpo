@@ -112,9 +112,11 @@ Hello, world!
 
 ## Licence
 
-Plumlang is source-available under the
-[Plumlang Commercial License 1.0](https://github.com/plumlang/plumlang/blob/main/LICENSE):
-free for personal, educational, research and other non-commercial use, and
-free to evaluate for 60 days. Commercial use needs a licence:
+Plumlang is licensed under the
+[Apache License 2.0](https://github.com/plumlang/plumlang/blob/main/LICENSE):
+free to use, change and redistribute, commercially or not. The
+[Plumlang Commercial License](https://github.com/plumlang/plumlang/blob/main/LICENSES/preferred/LicenseRef-Plumlang-Commercial-1.0)
+is an option for those who want a written agreement with Elixpo, for
+example for warranty, support or indemnity:
 [hello@elixpo.com](mailto:hello@elixpo.com). Programs you write in Plumlang
 are yours.

@@ -347,11 +347,11 @@ export default function Home() {
           <div className="flex flex-col justify-end gap-6 lg:items-end">
             <Image src="/plum-mark.svg" width={120} height={120} alt="" />
             <p className="max-w-sm text-sm leading-relaxed text-[#d9cfe6] lg:text-right">
-              Source-available under the{" "}
+              Licensed under the{" "}
               <a href={LICENSE_URL} className="text-[var(--plum-mist)] underline underline-offset-4">
-                Plumlang Commercial License 1.0
+                Apache License 2.0
               </a>
-              : free for personal, educational, research and other non-commercial use. Programs you write are yours.
+              , with the Plumlang Commercial License as an option: free to use, change and ship, commercially or not. Programs you write are yours.
             </p>
           </div>
         </div>
