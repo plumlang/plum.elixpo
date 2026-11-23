@@ -1,12 +1,12 @@
 {
   "sourceRepository": "https://github.com/plumlang/plumlang",
-  "sourceCommit": "ccfa9c909234e080e2e6f4a02fcf211b7405d4d2",
-  "sourceCommittedAt": "2026-11-23T20:46:17+05:30",
+  "sourceCommit": "973e40b8a8cc08ddd587e1600bb3dbb352f19a0e",
+  "sourceCommittedAt": "2026-11-23T21:08:02+05:30",
   "dirty": false,
   "files": [
     {
       "path": "docs/spec.md",
-      "sha256": "8d22235c7d09f17c439a2c7d53ba66b8b4bf0f7d504d2dbfb07795c0142c57eb"
+      "sha256": "1fb82090520437a4d381d59ec342510333f97d30d540aeaaf22c04361f0bacf7"
     },
     {
       "path": "docs/errors.md",
@@ -14,7 +14,7 @@
     },
     {
       "path": "docs/reference.md",
-      "sha256": "5a12c9d9208e43ca36b788a7245af665c6c0291fd098a2ad8909d55ab6ac616e"
+      "sha256": "fa7c814b8d08b33338a75a8fe1e706d06a06d727fa13e31d4762a33afc8bfe77"
     },
     {
       "path": "docs/orchard.md",
@@ -34,7 +34,15 @@
     },
     {
       "path": "docs/stdlib/README.md",
-      "sha256": "7ff0b3437d1afd5e907a533db05e2074b5acbda54d7bc0f39f9714decbf3ef37"
+      "sha256": "9d2ae6a4b6909dcf576fd24620869b860de50a93478887cf7da459b1893c3dc4"
+    },
+    {
+      "path": "docs/stdlib/base64.md",
+      "sha256": "9c853e84a11d85a8fc47e3c1a2e77513b1a9ec82db42f2813d10afef9c9b7b5f"
+    },
+    {
+      "path": "docs/stdlib/csv.md",
+      "sha256": "d4395e2f2d2891a9a3cab993d3486c448f98dec59e133863d420a0b288818718"
     },
     {
       "path": "docs/stdlib/fs.md",
@@ -43,6 +51,10 @@
     {
       "path": "docs/stdlib/hash.md",
       "sha256": "cb46d2fea2e06412bb9bf5667c9b1e6cffb5cc14b70d780fdbffa6de917e6342"
+    },
+    {
+      "path": "docs/stdlib/hex.md",
+      "sha256": "1858a76318d073a3b17d1db6e97c00c7fe6ae87e06c71fab51ef291d9a33d8d1"
     },
     {
       "path": "docs/stdlib/io.md",
@@ -85,6 +97,10 @@
       "sha256": "f359eb37d4ced050d2c9b5507596502d56872687620e09fb9851b3f26d552fc5"
     },
     {
+      "path": "docs/stdlib/path.md",
+      "sha256": "da9c9885108996804e6c80a80c6ba4db6186313e7e86b1f937753ae4da1220fa"
+    },
+    {
       "path": "docs/stdlib/str.md",
       "sha256": "563d350c21814aef31392636045cd875ab704aa2c26db4ac232ec756ed1e0b8d"
     },
@@ -97,8 +113,12 @@
       "sha256": "3dafb1d8355f198ab66e2957d92ae1b055b54e49fbcdea0b75a0833f7eac07ba"
     },
     {
+      "path": "docs/stdlib/utf8.md",
+      "sha256": "7a3365803e6180e982b699465c9c39ef9d9c1e7887e01b9a0930182836356aaa"
+    },
+    {
       "path": "docs/stdlib/writing-a-module.md",
-      "sha256": "ea283dde75589578c84eefe776156260e73b23236e400d24249352b5d632ebe6"
+      "sha256": "542ea07fc8b511619bec6db2bdf6caf9cc74824e59542d41778f34a375f5201e"
     },
     {
       "path": "examples/bank.plum",
@@ -129,6 +149,16 @@
       "path": "tools/install/install.sh",
       "sha256": "9ff9a1ad65cfbab7b5fa7992fecdc2245ecb9fe359ecdd2138b520b28ecb7b94",
       "servedAt": "/install.sh"
+    },
+    {
+      "path": "build/wasm/plum.js",
+      "sha256": "259b0109e501ab45b68c487b25706e526572073772ea484032ed820357dd45c5",
+      "servedAt": "/playground/plum.js"
+    },
+    {
+      "path": "build/wasm/plum.wasm",
+      "sha256": "675c5c0d24e5a6b922ca6d6536f9a5fbc9351474de4e7c1c2edbe39a936fe41e",
+      "servedAt": "/playground/plum.wasm"
     }
   ]
 }
