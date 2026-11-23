@@ -3,7 +3,10 @@
 // as a reviewed snapshot, and records the commit it came from. When the
 // checkout has them, it also copies docs/reference.md (the whole language on
 // one page) and the installers in tools/install/ into public/, so the site
-// serves them at /install.sh and /install.ps1.
+// serves them at /install.sh and /install.ps1. The single-file programs in
+// examples/ go into content/docs/examples/ for the playground's menu, and
+// the WebAssembly build (build/wasm/plum.js and plum.wasm, from `make wasm`)
+// into public/playground/ when the checkout has built it.
 //
 //   node scripts/sync-docs.mjs [path-to-plumlang]          refresh the snapshot
 //   node scripts/sync-docs.mjs [path-to-plumlang] --check  fail if it is stale
@@ -58,6 +61,13 @@ function sourceFiles() {
   for (const name of readdirSync(stdlib).sort()) {
     if (name.endsWith(".md")) files.push(`docs/stdlib/${name}`);
   }
+  // The examples, for the playground (snapshotted as content/docs/examples/).
+  const examples = join(source, "examples");
+  if (existsSync(examples)) {
+    for (const name of readdirSync(examples).sort()) {
+      if (name.endsWith(".plum")) files.push(`examples/${name}`);
+    }
+  }
   return files;
 }
 
@@ -81,7 +91,14 @@ function installerFiles() {
     .map((name) => `tools/install/${name}`);
 }
 
-const dirty = git("status", "--porcelain", "--", "docs", "tools/install");
+// The WebAssembly build (plumlang#32), copied into public/playground/. It is
+// build output, not tracked: run `make wasm` in the checkout first. A
+// checkout without it leaves public/playground/ as it is.
+function wasmFiles() {
+  return ["build/wasm/plum.js", "build/wasm/plum.wasm"].filter((path) => existsSync(join(source, path)));
+}
+
+const dirty = git("status", "--porcelain", "--", "docs", "examples", "tools/install");
 if (dirty && !allowDirty) {
   fail(`docs/ in ${source} has uncommitted changes:\n${dirty}\nCommit them first, or pass --allow-dirty for a local preview.`);
 }
@@ -91,7 +108,7 @@ const expected = new Map();
 const manifest = [];
 for (const path of files) {
   const text = readFileSync(join(source, path), "utf8").replace(/\r\n/g, "\n");
-  const target = path.replace(/^docs\//, "");
+  const target = path.replace(/^docs\//, ""); // examples/x.plum stays examples/x.plum
   expected.set(target, text);
   manifest.push({ path, sha256: createHash("sha256").update(text).digest("hex") });
 }
@@ -103,6 +120,13 @@ for (const path of installers) {
   const bytes = readFileSync(join(source, path));
   expectedPublic.set(path.replace(/^tools\/install\//, ""), bytes);
   manifest.push({ path, sha256: createHash("sha256").update(bytes).digest("hex"), servedAt: `/${path.split("/").pop()}` });
+}
+const wasm = wasmFiles();
+for (const path of wasm) {
+  const bytes = readFileSync(join(source, path));
+  const name = `playground/${path.split("/").pop()}`;
+  expectedPublic.set(name, bytes);
+  manifest.push({ path, sha256: createHash("sha256").update(bytes).digest("hex"), servedAt: `/${name}` });
 }
 const provenance = {
   sourceRepository: REPOSITORY,
@@ -154,7 +178,7 @@ if (check) {
   if (problems > 0) {
     fail(`the snapshot differs from ${commit.slice(0, 12)}; run node scripts/sync-docs.mjs ${args.filter((a) => !a.startsWith("-")).join(" ") || "../plumlang"} and review the changes`);
   }
-  console.log(`content/docs/ matches plumlang ${commit.slice(0, 12)} (${files.length} files, ${installers.length} installers)`);
+  console.log(`content/docs/ matches plumlang ${commit.slice(0, 12)} (${files.length} files, ${installers.length} installers, ${wasm.length} wasm files)`);
 } else {
   for (const path of stale) {
     rmSync(join(OUT_DIR, path));
@@ -173,10 +197,12 @@ if (check) {
     const full = join(PUBLIC_DIR, name);
     const current = existsSync(full) ? readFileSync(full) : null;
     if (current === null || !current.equals(bytes)) {
+      mkdirSync(dirname(full), { recursive: true });
       writeFileSync(full, bytes);
       console.log(`${current === null ? "added   " : "updated "} public/${name}`);
     }
   }
   if (installers.length === 0) console.log("no tools/install/ in the checkout: public/install.* left as they are");
+  if (wasm.length === 0) console.log("no build/wasm/ in the checkout (make wasm): public/playground/ left as it is");
   console.log(`content/docs/ is plumlang ${commit.slice(0, 12)}${dirty ? " (with uncommitted changes)" : ""}`);
 }

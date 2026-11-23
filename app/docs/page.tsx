@@ -44,7 +44,7 @@ const entries = [
     : []),
   { href: ERRORS_PAGE.path, title: "Error codes", text: "What each compiler error means, with an example and the fix." },
   { href: AGENTS_PAGE.path, title: "Coding agents", text: "llms.txt, llms-full.txt and an AGENTS.md snippet for your project." },
-  { href: "/playground/", title: "Playground", text: "Plumlang in the browser. Coming soon." },
+  { href: "/playground/", title: "Playground", text: "Run Plumlang in your browser, and share a program as a link." },
 ];
 
 export default function DocsOverview() {

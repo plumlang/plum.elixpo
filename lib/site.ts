@@ -16,6 +16,7 @@ export const BENCH_URL = `${REPO_URL}/blob/main/bench/README.md`;
 export const EXAMPLES_URL = `${REPO_URL}/tree/main/examples`;
 export const CONTRIBUTING_URL = `${REPO_URL}/blob/main/CONTRIBUTING.md`;
 export const PLAYGROUND_ISSUE_URL = `${REPO_URL}/issues/32`;
+export const PLAYGROUND_DOCS_URL = `${REPO_URL}/blob/main/docs/playground.md`;
 export const DISCUSSIONS_URL = `${REPO_URL}/discussions`;
 export const LICENSE_URL = `${REPO_URL}/blob/main/LICENSE`;
 export const ELIXPO_URL = "https://elixpo.com";
