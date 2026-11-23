@@ -19,6 +19,8 @@ export type RenderOptions = {
   resolveLink?: (href: string) => string | null;
   /** The URL of a spec section like "9.4", for "section 9.4" in the text. */
   sectionUrl?: (number: string) => string | undefined;
+  /** Rewrites an image's src; null shows its alt text instead. Without it, images render as marked renders them. */
+  resolveImage?: (src: string) => string | null;
 };
 
 const ERROR_CODE = /^[EW]\d{4}$/;
@@ -65,7 +67,7 @@ export function firstParagraph(markdown: string): string {
 }
 
 export function renderMarkdown(markdown: string, options: RenderOptions = {}): { html: string; headings: Heading[] } {
-  const { shift = 0, resolveLink = (href) => href, sectionUrl } = options;
+  const { shift = 0, resolveLink = (href) => href, sectionUrl, resolveImage } = options;
   const headings: Heading[] = [];
   const used = new Map<string, number>();
   let linkDepth = 0;
@@ -112,6 +114,14 @@ export function renderMarkdown(markdown: string, options: RenderOptions = {}): {
         const rel = external ? ' rel="noopener"' : "";
         return `<a href="${escapeHtml(target)}"${titleAttr}${rel}>${inner}</a>`;
       },
+      ...(resolveImage && {
+        image({ href, title, text }: Tokens.Image) {
+          const src = resolveImage(href);
+          if (src === null) return escapeHtml(text);
+          const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
+          return `<img src="${escapeHtml(src)}" alt="${escapeHtml(text)}"${titleAttr} loading="lazy" decoding="async">`;
+        },
+      }),
       text(token: Tokens.Text | Tokens.Escape) {
         if ("tokens" in token && token.tokens) return this.parser.parseInline(token.tokens);
         const escaped = "escaped" in token && token.escaped ? token.text : escapeHtml(token.text);

@@ -59,4 +59,5 @@ export const PRIMARY_NAV = [
   { href: "/docs/", label: "Docs" },
   { href: "/docs/stdlib/", label: "Library" },
   { href: "/playground/", label: "Playground" },
+  { href: "/packages/", label: "Packages" },
 ] as const;

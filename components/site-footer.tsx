@@ -31,6 +31,7 @@ const columns = [
       { href: "/docs/install/", label: "Install" },
       { href: RELEASES_URL, label: "Releases" },
       { href: "/playground/", label: "Playground" },
+      { href: "/packages/", label: "Packages" },
       { href: ROADMAP_URL, label: "Roadmap" },
     ],
   },
