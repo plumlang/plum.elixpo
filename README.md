@@ -183,6 +183,25 @@ are shared Elixpo workflows, synced from plumlang; change them there.
 After a deploy, `.github/workflows/search-console.yml` submits the sitemap to
 Google Search Console.
 
+### Deploying by hand with wrangler
+
+`wrangler.toml` names the same Pages project (`plum-elixpo`, output `out/`),
+so a maintainer can deploy from a checkout:
+
+```sh
+npm ci && npm run build && npm run site:check
+npm run pages:dev          # serve out/ locally, with public/_headers applied
+npm run deploy:preview     # a preview deployment (branch "preview")
+npm run deploy             # production: plum.elixpo.com
+```
+
+The deploy scripts read `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`
+from `.env.local` (`--env-file .env.local`), which git ignores. The committed
+`.env` is the same file encrypted with sops for the keys in `.sops.yaml`;
+decrypt it into `.env.local` with `sops decrypt .env > .env.local`.
+`public/_headers` serves `/install.sh` and `/install.ps1` as `text/plain`
+and `/playground/plum.wasm` as `application/wasm`.
+
 ## Related repositories
 
 - [plumlang/plumlang](https://github.com/plumlang/plumlang): the language,
