@@ -12,7 +12,7 @@ virtual machine and the standard library are all inside it.
 ## Linux and macOS
 
 ```bash
-curl -fsSL https://github.com/plumlang/plumlang/releases/latest/download/install.sh | sh
+curl -fsSL https://plum.elixpo.com/install.sh | sh
 ```
 
 The script installs `plum` into `~/.plum/bin` and prints the line to add to
@@ -25,7 +25,7 @@ universal binary for Apple silicon and Intel).
 In PowerShell:
 
 ```powershell
-irm https://github.com/plumlang/plumlang/releases/latest/download/install.ps1 | iex
+irm https://plum.elixpo.com/install.ps1 | iex
 ```
 
 The script installs `plum.exe` into `%LOCALAPPDATA%\Plumlang\bin` and adds
@@ -54,11 +54,11 @@ Set these environment variables before running an installer:
 | `PLUM_INSTALL` | `~/.plum`; on Windows `%LOCALAPPDATA%\Plumlang` | Where to install. The binary goes in its `bin` folder. |
 
 ```bash
-curl -fsSL https://github.com/plumlang/plumlang/releases/latest/download/install.sh | PLUM_VERSION=0.1.0 PLUM_INSTALL=/opt/plum sh
+curl -fsSL https://plum.elixpo.com/install.sh | PLUM_VERSION=0.1.0 PLUM_INSTALL=/opt/plum sh
 ```
 
 ```powershell
-$env:PLUM_VERSION = "0.1.0"; irm https://github.com/plumlang/plumlang/releases/latest/download/install.ps1 | iex
+$env:PLUM_VERSION = "0.1.0"; irm https://plum.elixpo.com/install.ps1 | iex
 ```
 
 To uninstall, delete the install folder.

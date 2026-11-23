@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
+import { CopyButtons } from "@/components/copy-buttons";
 import { SiteHeader } from "@/components/site-header";
 import { OG_IMAGE } from "@/lib/seo";
 import { THEME_SCRIPT } from "@/lib/theme";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </div>
         <SiteFooter />
+        <CopyButtons />
       </body>
     </html>
   );

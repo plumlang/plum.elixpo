@@ -37,9 +37,9 @@ export const editUrl = (path: string) => `${REPO_URL}/edit/main/${path}`;
 /** A GitHub link that edits a file of this website's repository on main. */
 export const siteEditUrl = (path: string) => `${SITE_REPO_URL}/edit/main/${path}`;
 
-/** The one-line installers, from the newest GitHub release. */
-export const INSTALL_SH_URL = `${REPO_URL}/releases/latest/download/install.sh`;
-export const INSTALL_PS1_URL = `${REPO_URL}/releases/latest/download/install.ps1`;
+/** The one-line installers, served by this site (public/, synced from plumlang). */
+export const INSTALL_SH_URL = `${SITE_URL}/install.sh`;
+export const INSTALL_PS1_URL = `${SITE_URL}/install.ps1`;
 export const INSTALL_COMMANDS = {
   unix: `curl -fsSL ${INSTALL_SH_URL} | sh`,
   windows: `irm ${INSTALL_PS1_URL} | iex`,
