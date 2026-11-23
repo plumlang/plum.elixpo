@@ -101,6 +101,22 @@
       "sha256": "407d1238778a5b72a1460efb92731070af7cb32640d324616a3180153bf286b3"
     },
     {
+      "path": "examples/bank.plum",
+      "sha256": "3cfdd42540cf8e2e9cc417516617d30e0c6a9ad6187caed7efaed147c9157804"
+    },
+    {
+      "path": "examples/echo.plum",
+      "sha256": "10a5bbe84593eb89ac8bf2d94d5b7641d60539d637140d001bdb73610b3f3f17"
+    },
+    {
+      "path": "examples/shapes.plum",
+      "sha256": "ee43fbd212e922f40de25cf480cc8ff234d473bd64384a7fc4be63689c91894f"
+    },
+    {
+      "path": "examples/todo.plum",
+      "sha256": "8bdf5cb8c1adb29fd4e24f65f848a3c77221769afdd6d102720dff6cb4fe35d8"
+    },
+    {
       "path": "tools/install/install.ps1",
       "sha256": "8861bb03815d33da6e7253c3a684a64db663504542f0a4bb676819416596d95c",
       "servedAt": "/install.ps1"

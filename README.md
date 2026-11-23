@@ -21,7 +21,7 @@ and no server action.
 | `/docs/reference/` | The whole language on one page: `docs/reference.md` ([plumlang#87](https://github.com/plumlang/plumlang/issues/87)), only once the snapshot has it. |
 | `/docs/errors/` | Every error code, each with its own anchor (`/docs/errors/#E0401`). |
 | `/docs/agents/` | Using Plumlang with coding agents, with an `AGENTS.md` snippet. |
-| `/playground/` | Placeholder for the WebAssembly playground ([plumlang#32](https://github.com/plumlang/plumlang/issues/32)). |
+| `/playground/` | The playground: plum compiled to WebAssembly runs programs in the browser, with the examples and the tour in a menu, errors as you type, Format, and share links ([plumlang#32](https://github.com/plumlang/plumlang/issues/32)). |
 
 Every docs page opens with its one-line purpose, a link to the next page,
 "Copy for LLM" and a link to `llms-full.txt`, and ends with previous / next.
@@ -60,11 +60,15 @@ node scripts/sync-docs.mjs ../plumlang --check  # or: npm run docs:check -- ../p
 ```
 
 The script copies `docs/spec.md`, `docs/errors.md`, `docs/stdlib/*.md` and,
-when plumlang has it, `docs/reference.md`; removes files deleted upstream;
-copies `tools/install/install.sh` and `install.ps1` byte for byte into
-`public/` when the checkout has them (a checkout without them leaves
-`public/` alone); and refuses a checkout whose `docs/` or `tools/install/`
-has uncommitted changes (`--allow-dirty` previews them locally). Commit the
+when plumlang has it, `docs/reference.md`, and `examples/*.plum` into
+`content/docs/examples/` (the playground's menu); removes files deleted
+upstream; copies `tools/install/install.sh` and `install.ps1` byte for byte
+into `public/` when the checkout has them (a checkout without them leaves
+`public/` alone); copies the WebAssembly build, `build/wasm/plum.js` and
+`plum.wasm`, into `public/playground/` when the checkout has built it (run
+`make wasm` there first; without it `public/playground/` is left alone);
+and refuses a checkout whose `docs/`, `examples/` or `tools/install/` has
+uncommitted changes (`--allow-dirty` previews them locally). Commit the
 result as its own change, and review it like any other: the diff is the
 docs' diff.
 
@@ -108,6 +112,34 @@ The spec is split at its numbered `##` sections; headings get GitHub's slugs,
 so anchors written for GitHub keep working, and "section 9.4" in the text
 links to that part of the spec. Links between docs files become site links,
 and links to other files of the plumlang repository go to GitHub.
+
+### The playground
+
+`/playground/` runs the real `plum`, compiled to WebAssembly by plumlang's
+`make wasm` (plumlang's `docs/playground.md` has its API). The two files are
+committed in `public/playground/` (`plum.wasm` is about 480 KB, 190 KB
+gzipped; `plum.js` 23 KB), so a build needs nothing from outside this tree;
+`content/docs/source.json` records the plumlang commit and the hash of each.
+Every plumlang release also publishes them as `plum-X.Y.Z-wasm.tar.gz`. To
+update them, build them in the plumlang checkout and sync:
+
+```bash
+(cd ../plumlang && make wasm)      # emcc, or Docker with the pinned emsdk image
+node scripts/sync-docs.mjs ../plumlang
+```
+
+| Part | Where |
+|---|---|
+| The page (one-line purpose, next link) | `app/playground/page.tsx` |
+| The editor, Run / Format / Share, the output | `components/playground.tsx`: a textarea over two layers, the text highlighted by `lib/highlight.ts` and the diagnostics marked |
+| plum itself | `public/playground/worker.js`, a module Web Worker that loads `plum.js`; Stop terminates it |
+| The examples menu | `lib/playground.ts`: plumlang's `examples/` and the first runnable program of each tour step, without those that need files or the network |
+| Share links | `lib/share.ts`: the program in the URL's hash, deflate-compressed with `CompressionStream` and base64url (`#code=z...`), so no server stores anything |
+| Headers | `public/_headers`: `application/wasm`, and revalidation on every load, since the three files must match. No threads, so no COOP/COEP is needed. |
+
+Runs are sandboxed with plum's limits: no files, network or commands, input
+always at its end, and a stop after 50 million steps (about a second), 64 MB
+or 5 seconds of sleeping.
 
 `next.config.ts` sets `output: "export"` and `trailingSlash: true`: every page
 is `out/<path>/index.html` and has exactly one URL, ending in `/`. Canonical

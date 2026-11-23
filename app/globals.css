@@ -256,6 +256,117 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* The playground: components/playground.tsx                            */
+/* A textarea with transparent text over two layers that show the same  */
+/* text, highlighted and with the diagnostics marked: all three share   */
+/* one font, padding and line height, so every character lines up.      */
+
+:root {
+  --pg-error: #f97066;
+  --pg-warning: #f2c48d;
+  --pg-font: 0.85rem/1.65 var(--font-jetbrains-mono, ui-monospace), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.pg-editor {
+  display: flex;
+  height: clamp(18rem, 58vh, 34rem);
+  min-height: 0;
+}
+.pg-gutter {
+  flex: none;
+  overflow: hidden;
+  padding: 1rem 0.6rem 1rem 0.9rem;
+  border-right: 1px solid var(--code-border);
+  font: var(--pg-font);
+  text-align: right;
+  color: var(--tok-comment);
+  user-select: none;
+  min-width: 3.2rem;
+}
+.pg-gutter-error {
+  color: var(--pg-error);
+  font-weight: 600;
+}
+.pg-gutter-warning {
+  color: var(--pg-warning);
+}
+.pg-code {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.pg-layer,
+.pg-input {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border: 0;
+  font: var(--pg-font);
+  letter-spacing: normal;
+  tab-size: 4;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.pg-layer {
+  overflow: hidden;
+  pointer-events: none;
+  color: transparent;
+}
+.pg-highlight {
+  color: var(--code-fg);
+}
+.pg-input {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--code-fg);
+  outline: none;
+}
+.pg-input::selection {
+  background: rgb(246 245 240 / 0.22);
+}
+.pg-mark {
+  text-decoration: underline wavy var(--pg-error);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 0.25em;
+}
+.pg-mark.pg-warning {
+  text-decoration-color: var(--pg-warning);
+}
+.pg-inline {
+  color: var(--pg-error);
+  opacity: 0.85;
+  font-style: italic;
+}
+.pg-inline.pg-warning {
+  color: var(--pg-warning);
+}
+.pg-output {
+  flex: 1;
+  min-height: 12rem;
+  max-height: clamp(18rem, 70vh, 42rem);
+  margin: 0;
+  padding: 1rem 1.1rem;
+  overflow: auto;
+  font: var(--pg-font);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.pg-stderr {
+  color: var(--destructive);
+}
+.pg-note {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------ */
 /* Docs prose: markdown rendered by lib/markdown.ts                     */
 
 .prose-doc {
