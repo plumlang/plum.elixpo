@@ -1,0 +1,8 @@
+# Cloudflare Pages project for plum.elixpo.com, for deploying by hand with
+# wrangler (npm run deploy). CI deploys the same project from
+# .github/workflows/deploy.yml. The site is static: next build exports it to
+# out/, and public/_headers sets the content types (the installers as text,
+# plum.wasm as application/wasm).
+name = "plum-elixpo"
+pages_build_output_dir = "out"
+compatibility_date = "2026-11-01"
