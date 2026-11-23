@@ -14,7 +14,7 @@ import { REPO_URL } from "@/lib/site";
 
 const CONTENT = join(process.cwd(), "content");
 
-export type SectionId = "start" | "tour" | "language" | "stdlib" | "reference";
+export type SectionId = "start" | "tour" | "language" | "stdlib" | "tools" | "reference";
 
 export type DocPage = {
   /** Path segments under /docs/; [] is /docs/ itself. */
@@ -366,6 +366,55 @@ const referencePage: DocPage | undefined = existsSync(REFERENCE_FILE)
 export const REFERENCE_PAGE = referencePage;
 
 // ---------------------------------------------------------------------------
+// Tools: the guides to Orchard, the language server, the REPL and the
+// WebAssembly build, each one page, when the snapshot has them.
+
+const TOOL_GUIDES: { file: string; slug: string; nav: string; metaTitle: string; lead: string }[] = [
+  {
+    file: "orchard.md",
+    slug: "orchard",
+    nav: "Packages (Orchard)",
+    metaTitle: "Orchard packages",
+    lead: "Find, add and publish packages with the plum command and the Orchard registry.",
+  },
+  {
+    file: "lsp.md",
+    slug: "lsp",
+    nav: "Language server",
+    metaTitle: "The language server",
+    lead: "plum lsp: errors as you type, hover, go to definition and completion in any editor.",
+  },
+  { file: "repl.md", slug: "repl", nav: "REPL", metaTitle: "The REPL", lead: "Type Plumlang at a prompt and see each result at once." },
+  {
+    file: "playground.md",
+    slug: "wasm",
+    nav: "WebAssembly",
+    metaTitle: "Plumlang in the browser",
+    lead: "Run Plumlang in a web page with the WebAssembly build, as the playground does.",
+  },
+];
+
+const toolPages: DocPage[] = TOOL_GUIDES.filter((guide) => existsSync(join(CONTENT, "docs", guide.file))).map((guide) => {
+  const { title, body } = splitTitle(read("docs", guide.file));
+  const shown = title || guide.nav;
+  return {
+    slug: ["tools", guide.slug],
+    path: `/docs/tools/${guide.slug}/`,
+    title: shown,
+    metaTitle: `${guide.metaTitle} · Tools`,
+    navTitle: guide.nav,
+    description: describe(body, shown),
+    section: "tools" as const,
+    eyebrow: "Tools",
+    source: { repo: "plumlang" as const, path: `docs/${guide.file}` },
+    markdown: body,
+    shift: 0,
+    tocDepth: 2 as const,
+    lead: guide.lead,
+  };
+});
+
+// ---------------------------------------------------------------------------
 
 const tour = tourPages();
 
@@ -381,6 +430,7 @@ export const DOC_PAGES: DocPage[] = [
   ...specPages,
   stdlibIndex,
   ...stdlibPages,
+  ...toolPages,
   ...(referencePage ? [referencePage] : []),
   errorsPage,
   agents,
@@ -407,6 +457,9 @@ export const NAV: NavGroup[] = [
     title: "Standard library",
     items: [stdlibIndex, ...stdlibPages].map((p) => ({ title: p.navTitle, path: p.path })),
   },
+  ...(toolPages.length > 0
+    ? [{ id: "tools" as const, title: "Tools", items: toolPages.map((p) => ({ title: p.navTitle, path: p.path })) }]
+    : []),
   {
     id: "reference",
     title: "Reference",
@@ -419,6 +472,7 @@ export const SECTION_TITLES: Record<SectionId, { title: string; path: string }> 
   tour: { title: "Tour", path: "/docs/tour/" },
   language: { title: "Language reference", path: "/docs/language/" },
   stdlib: { title: "Standard library", path: "/docs/stdlib/" },
+  tools: { title: "Tools", path: (toolPages[0] ?? stdlibIndex).path },
   reference: { title: "Reference", path: (referencePage ?? errorsPage).path },
 };
 
@@ -430,6 +484,7 @@ export const AGENTS_PAGE = agents;
 export const INSTALL_PAGE = install;
 export const LANGUAGE_INDEX = languageIndex;
 export const STDLIB_INDEX = stdlibIndex;
+export const TOOL_PAGES = toolPages;
 
 /** Where a page's Markdown copy is served: the page's URL plus index.md. */
 export const markdownPath = (page: DocPage) => `${page.path}index.md`;
@@ -462,6 +517,7 @@ const repoPathToUrl = new Map<string, string>([
   ["docs/stdlib/README.md", stdlibIndex.path],
   ...(referencePage ? [["docs/reference.md", referencePage.path] as [string, string]] : []),
   ...stdlibPages.map((p) => [p.source.path, p.path] as [string, string]),
+  ...toolPages.map((p) => [p.source.path, p.path] as [string, string]),
 ]);
 
 /** Where a GitHub anchor in docs/spec.md lives on the site: "#52-if" is on the Statements page. */

@@ -19,6 +19,7 @@ import {
   SPEC_SECTIONS,
   STDLIB_INDEX,
   STDLIB_MODULES,
+  TOOL_PAGES,
   TOUR_PAGES,
   markdownPath,
   resolveDocLink,
@@ -111,6 +112,7 @@ export function llmsTxt(): string {
     ["Tour", TOUR_PAGES],
     ["Language specification", [LANGUAGE_INDEX, ...SPEC_SECTIONS]],
     ["Standard library", [STDLIB_INDEX, ...STDLIB_MODULES]],
+    ...(TOOL_PAGES.length > 0 ? [["Tools", TOOL_PAGES] as [string, DocPage[]]] : []),
     ["Error codes", [ERRORS_PAGE]],
   ];
   const parts = [
@@ -125,7 +127,7 @@ export function llmsTxt(): string {
 
 /** What llms-full.txt holds, in order. */
 function fullContents(): string {
-  return `${REFERENCE_PAGE ? "the whole language on one page, then " : ""}the tour, the language specification, the standard library and every error code, as Markdown.`;
+  return `${REFERENCE_PAGE ? "the whole language on one page, then " : ""}the tour, the language specification, the standard library, ${TOOL_PAGES.length > 0 ? "the tools (packages, language server, REPL, WebAssembly), " : ""}and every error code, as Markdown.`;
 }
 
 /** /llms-full.txt: the documentation as one Markdown file. */
@@ -137,6 +139,7 @@ export function llmsFullTxt(): string {
     ...SPEC_SECTIONS,
     STDLIB_INDEX,
     ...STDLIB_MODULES,
+    ...TOOL_PAGES,
     ERRORS_PAGE,
   ];
   const header = [

@@ -12,6 +12,7 @@ import {
   REFERENCE_PAGE,
   SOURCE,
   STDLIB_INDEX,
+  TOOL_PAGES,
   TOUR_PAGES,
   markdownPath,
   neighbours,
@@ -35,6 +36,9 @@ const entries = [
   { href: TOUR_PAGES[0].path, title: "Tour", text: `Learn the language in ${TOUR_PAGES.length - 1} short steps, from hello world to a web server.` },
   { href: LANGUAGE_INDEX.path, title: "Language reference", text: "The specification, one section per page: the exact rules." },
   { href: STDLIB_INDEX.path, title: "Standard library", text: "Every built-in module, with its functions and examples." },
+  ...(TOOL_PAGES.length > 0
+    ? [{ href: TOOL_PAGES[0].path, title: "Tools", text: "Orchard packages, the language server, the REPL and the WebAssembly build." }]
+    : []),
   ...(REFERENCE_PAGE
     ? [{ href: REFERENCE_PAGE.path, title: "On one page", text: "The whole language on one page." }]
     : []),
