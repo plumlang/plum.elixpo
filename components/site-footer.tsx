@@ -105,11 +105,11 @@ export function SiteFooter() {
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:justify-between sm:px-6">
           <p>© 2026 Elixpo. Plumlang and the Plumlang logo are trademarks of Elixpo.</p>
           <p>
-            Source-available under the{" "}
+            Licensed under the{" "}
             <a href={LICENSE_URL} className="underline underline-offset-4 hover:text-foreground">
-              Plumlang Commercial License 1.0
+              Apache License 2.0
             </a>
-            .
+            , with the Plumlang Commercial License as an option.
           </p>
         </div>
       </div>

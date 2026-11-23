@@ -240,7 +240,11 @@ and `/playground/plum.wasm` as `application/wasm`.
 
 ## Licence
 
-Plumlang is source-available under the
-[Plumlang Commercial License 1.0](https://github.com/plumlang/plumlang/blob/main/LICENSE);
-it is not open source. "Plumlang", "Plum" and the Plumlang logo are trademarks
-of Elixpo. Questions: [hello@elixpo.com](mailto:hello@elixpo.com).
+Plumlang is licensed under the
+[Apache License 2.0](https://github.com/plumlang/plumlang/blob/main/LICENSE),
+with the
+[Plumlang Commercial License 1.0](https://github.com/plumlang/plumlang/blob/main/LICENSES/preferred/LicenseRef-Plumlang-Commercial-1.0)
+as an option (`Apache-2.0 OR LicenseRef-Plumlang-Commercial-1.0`).
+"Plumlang", "Plum" and the Plumlang logo are trademarks of Elixpo, and
+neither licence grants rights to them. Questions:
+[hello@elixpo.com](mailto:hello@elixpo.com).
