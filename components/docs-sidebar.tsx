@@ -53,7 +53,7 @@ export function DocsSidebar({ groups }: { groups: NavGroup[] }) {
       </details>
       <nav
         aria-label="Documentation"
-        className="sticky top-14 hidden max-h-[calc(100svh-3.5rem)] overflow-y-auto py-8 pr-4 lg:block"
+        className="sticky top-20 hidden max-h-[calc(100svh-5rem)] overflow-y-auto py-8 pr-4 lg:block"
       >
         <Groups groups={groups} current={current} />
       </nav>

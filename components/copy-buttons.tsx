@@ -15,7 +15,7 @@ export function CopyButtons() {
       const button = document.createElement("button");
       button.type = "button";
       button.className =
-        "copy-button rounded-md border bg-background px-2 py-1 font-mono text-[0.7rem] text-muted-foreground hover:text-foreground";
+        "copy-button rounded-md border border-white/20 bg-[var(--plum-deep)] px-2 py-1 font-mono text-[0.7rem] text-[var(--paper)] hover:border-white/40";
       button.textContent = "Copy";
       button.setAttribute("aria-label", "Copy this code");
       button.addEventListener("click", async () => {

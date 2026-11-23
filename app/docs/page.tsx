@@ -3,7 +3,21 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { DocFooter, DocHeader } from "@/components/doc-parts";
 import { JsonLd } from "@/components/json-ld";
-import { DOC_PAGES, SOURCE, SPEC_SECTIONS, STDLIB_MODULES, TOUR_PAGES, neighbours } from "@/lib/docs";
+import {
+  AGENTS_PAGE,
+  DOC_PAGES,
+  ERRORS_PAGE,
+  INSTALL_PAGE,
+  LANGUAGE_INDEX,
+  REFERENCE_PAGE,
+  SOURCE,
+  STDLIB_INDEX,
+  TOOL_PAGES,
+  TOUR_PAGES,
+  markdownPath,
+  neighbours,
+} from "@/lib/docs";
+import { pageMarkdown } from "@/lib/llm";
 import { ORGANIZATION, breadcrumbList, pageMetadata } from "@/lib/seo";
 import { REPO_URL, absoluteUrl, siteEditUrl } from "@/lib/site";
 
@@ -13,27 +27,24 @@ export const metadata: Metadata = pageMetadata({
   title: overview.metaTitle,
   description: overview.description,
   path: overview.path,
+  markdown: markdownPath(overview),
 });
 
-const sections = [
-  {
-    href: "/docs/tour/",
-    title: "Tour",
-    text: "New to Plumlang, or to programming? Start here: eleven short steps, each with programs you can run.",
-    items: TOUR_PAGES.slice(1, 6),
-  },
-  {
-    href: "/docs/language/",
-    title: "Language reference",
-    text: "The specification, one section per page: what every part of a Plumlang program means, exactly.",
-    items: SPEC_SECTIONS.slice(2, 7),
-  },
-  {
-    href: "/docs/stdlib/",
-    title: "Standard library",
-    text: "The modules that come with plum: numbers, text, files, time, JSON, tasks, sockets and HTTP.",
-    items: STDLIB_MODULES.filter((m) => ["math", "str", "fs", "json", "net.http"].includes(m.title)),
-  },
+/** The documentation in reading order: one line each, saying what it is for. */
+const entries = [
+  { href: INSTALL_PAGE.path, title: "Install", text: "One command on Linux, macOS or Windows, or build from source." },
+  { href: TOUR_PAGES[0].path, title: "Tour", text: `Learn the language in ${TOUR_PAGES.length - 1} short steps, from hello world to a web server.` },
+  { href: LANGUAGE_INDEX.path, title: "Language reference", text: "The specification, one section per page: the exact rules." },
+  { href: STDLIB_INDEX.path, title: "Standard library", text: "Every built-in module, with its functions and examples." },
+  ...(TOOL_PAGES.length > 0
+    ? [{ href: TOOL_PAGES[0].path, title: "Tools", text: "Orchard packages, the language server, the REPL and the WebAssembly build." }]
+    : []),
+  ...(REFERENCE_PAGE
+    ? [{ href: REFERENCE_PAGE.path, title: "On one page", text: "The whole language on one page." }]
+    : []),
+  { href: ERRORS_PAGE.path, title: "Error codes", text: "What each compiler error means, with an example and the fix." },
+  { href: AGENTS_PAGE.path, title: "Coding agents", text: "llms.txt, llms-full.txt and an AGENTS.md snippet for your project." },
+  { href: "/playground/", title: "Playground", text: "Plumlang in the browser. Coming soon." },
 ];
 
 export default function DocsOverview() {
@@ -66,59 +77,33 @@ export default function DocsOverview() {
         crumbs={crumbs}
         eyebrow={overview.eyebrow}
         title={overview.title}
-        lead="Everything about the language, from a first program to the exact rules. The reference pages are built from Plumlang's own specification and library docs, so they match the language they describe."
+        lead={overview.lead}
+        next={next}
+        markdown={pageMarkdown(overview)}
       />
 
-      <div className="mt-10 grid gap-5 md:grid-cols-3">
-        {sections.map((section) => (
-          <section key={section.href} className="flex flex-col rounded-xl border bg-card p-6" aria-labelledby={`s-${section.title}`}>
-            <h2 id={`s-${section.title}`} className="text-lg font-semibold">
-              <Link href={section.href} className="hover:text-primary">
-                {section.title}
-              </Link>
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{section.text}</p>
-            <ul className="mt-4 space-y-1.5 text-sm">
-              {section.items.map((item) => (
-                <li key={item.path}>
-                  <Link href={item.path} className="text-primary hover:underline">
-                    {item.navTitle}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+      <ol className="mt-2 max-w-3xl">
+        {entries.map((entry, i) => (
+          <li key={entry.href} className="border-b">
             <Link
-              href={section.href}
-              className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium hover:text-primary"
+              href={entry.href}
+              className="group grid grid-cols-[2.5rem_minmax(0,1fr)_1.5rem] items-baseline gap-3 py-5"
             >
-              All of the {section.title.toLowerCase()} <ArrowRight className="size-3.5" aria-hidden="true" />
+              <span className="font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+              <span>
+                <span className="block text-lg font-semibold tracking-tight group-hover:text-link">{entry.title}</span>
+                <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{entry.text}</span>
+              </span>
+              <ArrowRight
+                className="size-4 self-center text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-link"
+                aria-hidden="true"
+              />
             </Link>
-          </section>
+          </li>
         ))}
-      </div>
+      </ol>
 
-      <div className="mt-5 grid gap-5 md:grid-cols-3">
-        <Link href="/docs/errors/" className="rounded-xl border p-6 transition-colors hover:border-primary/50">
-          <h2 className="font-semibold">Error codes</h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Every compiler error, like <code className="font-mono">E0401</code>, with an example and its fix.
-          </p>
-        </Link>
-        <Link href="/docs/install/" className="rounded-xl border p-6 transition-colors hover:border-primary/50">
-          <h2 className="font-semibold">Download and install</h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Get the <code className="font-mono">plum</code> binary from GitHub Releases, or build it from source.
-          </p>
-        </Link>
-        <Link href="/playground/" className="rounded-xl border p-6 transition-colors hover:border-primary/50">
-          <h2 className="font-semibold">Playground</h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Run Plumlang in your browser, with nothing to install. Coming soon.
-          </p>
-        </Link>
-      </div>
-
-      <p className="mt-10 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-8 max-w-3xl text-sm leading-relaxed text-muted-foreground">
         The reference is a reviewed copy of the <code className="font-mono">docs/</code> folder of{" "}
         <a href={REPO_URL} className="underline underline-offset-4 hover:text-foreground">
           plumlang/plumlang
@@ -130,7 +115,7 @@ export default function DocsOverview() {
         >
           {SOURCE.sourceCommit.slice(0, 7)}
         </a>
-        . To correct it, use the &ldquo;Edit this page on GitHub&rdquo; link at the bottom of any page.
+        .
       </p>
 
       <div className="max-w-3xl">

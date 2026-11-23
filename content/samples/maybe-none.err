@@ -1,0 +1,4 @@
+maybe-none.plum:7:6: error[E0408]: '+' can't use int?, which may be none; give a default with '??' or check it with 'if plant' first
+7 | drop(age + 1)
+  |      ^~~~~~~
+1 error

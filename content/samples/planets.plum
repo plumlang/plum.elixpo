@@ -1,0 +1,16 @@
+seed math
+
+root GREETING = "Hello"
+
+tree Planet {
+    name: str
+    radius_km: float
+
+    branch area() -> float => 4.0 * math.PI * self.radius_km ** 2
+}
+
+plant planets = [Planet("Mercury", 2439.7), Planet("Earth", 6371.0)]
+
+for p in planets {
+    drop("{GREETING}, {p.name}! Surface: {p.area():.0} km²")
+}

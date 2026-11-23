@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "docs:sync": "node scripts/sync-docs.mjs",
     "docs:check": "node scripts/sync-docs.mjs --check",
-    "site:check": "python3 scripts/check_site.py out"
+    "site:check": "python3 scripts/check_site.py out",
+    "samples:check": "python3 scripts/check_samples.py"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

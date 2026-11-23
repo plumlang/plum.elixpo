@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
 import { CREATORS, SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 
+// Social cards from plumlang/branding (og/plum.elixpo/), 1280 x 720.
 export const OG_IMAGE = {
   url: "/og.png",
-  width: 1200,
-  height: 630,
-  alt: "Plumlang: a small, fast, memory-safe programming language",
+  width: 1280,
+  height: 720,
+  alt: "Plumlang: easy to write, fast to run, safe by design",
 } as const;
+
+export const DOCS_OG_IMAGE = {
+  url: "/og-docs.png",
+  width: 1280,
+  height: 720,
+  alt: "Learn Plumlang: the tour, the specification, the standard library and every error code",
+} as const;
+
+type OgImage = typeof OG_IMAGE | typeof DOCS_OG_IMAGE;
 
 /**
  * Metadata for one page: title, description, canonical URL, Open Graph and
@@ -18,18 +28,23 @@ export function pageMetadata({
   path,
   type = "website",
   absoluteTitle = false,
+  image = path.startsWith("/docs/") ? DOCS_OG_IMAGE : OG_IMAGE,
+  markdown,
 }: {
   title: string;
   description: string;
   path: string;
   type?: "website" | "article";
   absoluteTitle?: boolean;
+  image?: OgImage;
+  /** The path of the page's Markdown copy, announced as an alternate. */
+  markdown?: string;
 }): Metadata {
   const socialTitle = absoluteTitle ? title : `${title} | ${SITE_NAME}`;
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    alternates: markdown ? { canonical: path, types: { "text/markdown": markdown } } : { canonical: path },
     openGraph: {
       type,
       siteName: SITE_NAME,
@@ -37,13 +52,13 @@ export function pageMetadata({
       title: socialTitle,
       description,
       url: path,
-      images: [OG_IMAGE],
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
       title: socialTitle,
       description,
-      images: [{ url: OG_IMAGE.url, alt: OG_IMAGE.alt }],
+      images: [{ url: image.url, alt: image.alt }],
     },
   };
 }
