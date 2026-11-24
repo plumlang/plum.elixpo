@@ -2,7 +2,7 @@
 title: Editors, packages and integrations
 nav: Editors and packages
 metaTitle: Plumlang editors, packages and integrations
-description: Use Plumlang in VS Code, Zed, Helix and any LSP editor, highlight it with Tree-sitter, highlight.js or Pygments, install it from Homebrew, and run it in GitHub Actions.
+description: Use Plumlang in VS Code, Zed, Helix and any LSP editor, highlight it with Tree-sitter, highlight.js or Pygments, install it from Homebrew, aqua, mise or Nix, and run it in GitHub Actions.
 lead: Where Plumlang works today, outside the plum binary itself.
 ---
 
@@ -66,3 +66,6 @@ your project and `plum publish` publishes one.
 | Windows | `irm https://plum.elixpo.com/install.ps1 \| iex` |
 | Homebrew | `brew install plumlang/tap/plum` |
 | winget | `winget install Elixpo.Plumlang` (*in review*) |
+| aqua | `aqua g -i plumlang/plumlang` |
+| mise | `mise use aqua:plumlang/plumlang` |
+| Nix / NixOS | `nix profile install nixpkgs#plum` (*in review*; [build from source with Nix](/docs/install/#package-managers) today) |
