@@ -69,6 +69,18 @@ To uninstall, delete the install folder.
 |---|---|---|
 | Homebrew | `brew install plumlang/tap/plum` | Available |
 | winget | `winget install Elixpo.Plumlang` | In review, not available yet |
+| aqua | `aqua g -i plumlang/plumlang` | Available |
+| mise | `mise use aqua:plumlang/plumlang` | Available |
+| Nix / NixOS | `nix profile install nixpkgs#plum` | In review ([nixpkgs#592489](https://github.com/NixOS/nixpkgs/pull/592489)), not available yet |
+
+Until the nixpkgs package lands, Nix users can build the same package from a
+clone of the repository:
+
+```bash
+git clone https://github.com/plumlang/plumlang && cd plumlang
+nix-build -E 'with import <nixpkgs> {}; callPackage ./packaging/nix/package.nix {}'
+./result/bin/plum version
+```
 
 Editors, highlighting packages and the GitHub Action are listed in
 [Editors and packages](/docs/ecosystem/).
