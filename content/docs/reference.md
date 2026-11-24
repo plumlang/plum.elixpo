@@ -12,7 +12,8 @@ every `output` block is exactly what the block before it prints.
   `tree`, imports `seed`. Booleans are `good` / `bad` (`true` / `false` also
   work). The absent value is `none`.
 - No semicolons; a statement ends at the end of its line. Comments start with
-  `#`; there are no block comments.
+  `#`; block comments are `#[ ... ]#` and nest; `##` lines before a
+  declaration are its doc comment (Markdown).
 - Types follow names: `x: int`, `branch f(a: int) -> str`. Parameter types
   and non-`none` results are always written; local types are inferred.
 - No truthiness: conditions must be `bool` (`if n > 0`, not `if n`).
@@ -464,6 +465,10 @@ channels) pauses only its own task.
 | `base64`, `hex` | bytes as Base64 or hexadecimal text |
 | `utf8` | code points; checking and repairing UTF-8 |
 | `csv` | read and write CSV |
+| `uuid` | unique identifiers: v4 (random) and v7 (time-ordered) |
+| `semver` | semantic versions: compare, sort, ranges, bump |
+| `url` | parse, build and join URLs; percent-encoding, query strings |
+| `toml` | read and write TOML 1.0 (`Json` values) |
 
 Built-in functions, no `seed` needed: `drop`, `ask`, `len`, `int`, `float`,
 `str`, `byte`, `type_of`, `assert`, `exit`.
@@ -485,6 +490,7 @@ page in [docs/stdlib](stdlib/README.md).
 plum run program.plum [args...]    run a program (or a folder with plum.toml)
 plum check program.plum            report every error without running
 plum fmt files-or-folders...       format in place (--check, --stdout)
+plum fmt --stdin                   format standard input to standard output
 plum stdlib [module]               list the standard library
 plum lsp                           the language server for editors (lsp.md)
 plum run --check-leaks file.plum   report objects kept alive by cycles
