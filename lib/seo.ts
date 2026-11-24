@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { CREATORS, SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 
-// The site's social card: the Elixpo x Plumlang banner (public/banner.jpg),
-// fitted to 1200 x 630 for Open Graph and Twitter (public/og-banner.jpg).
-// Docs pages keep their own card from plumlang/branding (og/plum.elixpo/).
+// The site's social card (public/og-image.png), 1280 x 720. The Elixpo x
+// Plumlang banner (public/banner.jpg) is for the GitHub READMEs, not for
+// search or social cards. Docs pages keep og-docs.png from plumlang/branding.
 export const OG_IMAGE = {
-  url: "/og-banner.jpg",
-  width: 1200,
-  height: 630,
-  alt: "Elixpo x Plumlang: a new programming language, built in the open, at github.com/plumlang and plum.elixpo.com",
+  url: "/og-image.png",
+  width: 1280,
+  height: 720,
+  alt: "Plumlang: reads like English, runs fast, ships as one binary. A new programming language from Elixpo, built on C.",
 } as const;
 
 export const DOCS_OG_IMAGE = {
