@@ -40,7 +40,7 @@ installed (MkDocs with `pymdownx.highlight`, Sphinx, and others).
 
 `@plumlang/plumlang` is the WebAssembly build of `plum` as an npm package: run,
 check and format Plumlang from Node or the browser, as the
-[playground](/playground/) does. It is published with each release from 2.2.0;
+[playground](/playground/) does. It is published with each release ([npm](https://www.npmjs.com/package/@plumlang/plumlang));
 see [the WebAssembly guide](/docs/tools/wasm/).
 
 ## Continuous integration

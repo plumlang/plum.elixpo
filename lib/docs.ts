@@ -387,6 +387,13 @@ const TOOL_GUIDES: { file: string; slug: string; nav: string; metaTitle: string;
   },
   { file: "repl.md", slug: "repl", nav: "REPL", metaTitle: "The REPL", lead: "Type Plumlang at a prompt and see each result at once." },
   {
+    file: "test.md",
+    slug: "test",
+    nav: "Testing",
+    metaTitle: "Testing with plum test",
+    lead: "Write test_ functions in *_test.plum files and run them all with plum test.",
+  },
+  {
     file: "playground.md",
     slug: "wasm",
     nav: "WebAssembly",

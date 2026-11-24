@@ -1,40 +1,44 @@
 {
   "sourceRepository": "https://github.com/plumlang/plumlang",
-  "sourceCommit": "973e40b8a8cc08ddd587e1600bb3dbb352f19a0e",
-  "sourceCommittedAt": "2026-11-23T21:08:02+05:30",
+  "sourceCommit": "6a4063ee236ed663009eec87e043c4e2fbf52391",
+  "sourceCommittedAt": "2026-11-24T13:52:03+05:30",
   "dirty": false,
   "files": [
     {
       "path": "docs/spec.md",
-      "sha256": "1fb82090520437a4d381d59ec342510333f97d30d540aeaaf22c04361f0bacf7"
+      "sha256": "c6c0e15d6ed1fb1f616570e0a8e2e2196cf5d45d5490c5998fc309a60e1e3ecf"
     },
     {
       "path": "docs/errors.md",
-      "sha256": "6eead7c99720527535fa162e8da91925875c4ca8ceb28a9407d57c38c4c54316"
+      "sha256": "1409054edfd112795465e2a7dd3bd91fad1c765824c951dbd5ec86c6276c7737"
     },
     {
       "path": "docs/reference.md",
-      "sha256": "fa7c814b8d08b33338a75a8fe1e706d06a06d727fa13e31d4762a33afc8bfe77"
+      "sha256": "fc3cbf55ec3eac55546a8c9ade3fa89a0b1272f7bcbdb1796da0c44977b0e140"
     },
     {
       "path": "docs/orchard.md",
-      "sha256": "a85b8738c57e5e97c2b9f1ef1d9919004a05744300d1e24a04d046cb12bd0110"
+      "sha256": "bdbe1f7e12845fe0f3854df642faf91161b899ec810f237ad3c513e8d516aae3"
     },
     {
       "path": "docs/lsp.md",
-      "sha256": "aa37b018ce6cf09d8011ddf9c2d73cf8a2a09d027b167d581aa6189b30bd919f"
+      "sha256": "2ded17a45126a5e4a89d587b79e863a22885b9fc6a303ab25ffdc89191bc9797"
     },
     {
       "path": "docs/repl.md",
       "sha256": "ead0d0a7561bb23d35109ee68dfaeccf4a5cadd73f13a44417fff3932190dd66"
     },
     {
+      "path": "docs/test.md",
+      "sha256": "fe2e779c09b5eb4e739257bfb76650b95782c7845d774085abb9788a330356cd"
+    },
+    {
       "path": "docs/playground.md",
-      "sha256": "a727a89bb55d78b201adfa7a35ea7875a5260af76756392d85c423fa03e78c76"
+      "sha256": "b06ce667a08940e1ea3850aae35319aae4d7ed73811b025bbb8605d8bbe233a2"
     },
     {
       "path": "docs/stdlib/README.md",
-      "sha256": "9d2ae6a4b6909dcf576fd24620869b860de50a93478887cf7da459b1893c3dc4"
+      "sha256": "e45e4c1441d0df7d3c5cab9c9dfa155849c1a1de1cec7af6b11c9420ca3a7fdb"
     },
     {
       "path": "docs/stdlib/base64.md",
@@ -101,6 +105,10 @@
       "sha256": "da9c9885108996804e6c80a80c6ba4db6186313e7e86b1f937753ae4da1220fa"
     },
     {
+      "path": "docs/stdlib/semver.md",
+      "sha256": "301ff269c34c4123a11c7bd9fe88353248dfa15bb364f05c084f0492fce93f3f"
+    },
+    {
       "path": "docs/stdlib/str.md",
       "sha256": "563d350c21814aef31392636045cd875ab704aa2c26db4ac232ec756ed1e0b8d"
     },
@@ -109,12 +117,28 @@
       "sha256": "f80dde9c821b431dacbfd228cf4780fef45161dc3ed2fd97ce41be8ceef15a92"
     },
     {
+      "path": "docs/stdlib/test.md",
+      "sha256": "1e87509f8538c0352a767d20d0601270d562f9292b7f4c21ace04d14525d1940"
+    },
+    {
       "path": "docs/stdlib/time.md",
       "sha256": "3dafb1d8355f198ab66e2957d92ae1b055b54e49fbcdea0b75a0833f7eac07ba"
     },
     {
+      "path": "docs/stdlib/toml.md",
+      "sha256": "c4f6fcd7657c90ccaa3eb10b4e14cd22c74dba9359a86767fba14181dd4adc6d"
+    },
+    {
+      "path": "docs/stdlib/url.md",
+      "sha256": "176850dbebaa98ab4ceb8dae81ed35ba498b2b8ee2c0a7b48da06f493842c5d3"
+    },
+    {
       "path": "docs/stdlib/utf8.md",
       "sha256": "7a3365803e6180e982b699465c9c39ef9d9c1e7887e01b9a0930182836356aaa"
+    },
+    {
+      "path": "docs/stdlib/uuid.md",
+      "sha256": "d826d104bcaf03872cf03f384422eea76306fa3b96b59b84cb6f3bf72180b126"
     },
     {
       "path": "docs/stdlib/writing-a-module.md",
@@ -157,7 +181,7 @@
     },
     {
       "path": "build/wasm/plum.wasm",
-      "sha256": "675c5c0d24e5a6b922ca6d6536f9a5fbc9351474de4e7c1c2edbe39a936fe41e",
+      "sha256": "2d5061c7689bef5d84ebd60c190c8e042840c98d521773c167adf3ce29efe125",
       "servedAt": "/playground/plum.wasm"
     }
   ]

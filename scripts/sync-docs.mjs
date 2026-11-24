@@ -49,7 +49,7 @@ if (!existsSync(join(source, "docs", "spec.md"))) {
 
 // The tool guides (Orchard, the language server, the REPL, WebAssembly),
 // copied when the checkout has them; lib/docs.ts makes each a page.
-const TOOL_DOCS = ["docs/orchard.md", "docs/lsp.md", "docs/repl.md", "docs/playground.md"];
+const TOOL_DOCS = ["docs/orchard.md", "docs/lsp.md", "docs/repl.md", "docs/test.md", "docs/playground.md"];
 
 // Which files make up the snapshot, relative to the plumlang repository.
 // docs/reference.md arrives with plumlang#87; until then it is skipped.
