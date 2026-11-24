@@ -44,7 +44,7 @@ export const INSTALL_COMMANDS = {
   unix: `curl -fsSL ${INSTALL_SH_URL} | sh`,
   windows: `irm ${INSTALL_PS1_URL} | iex`,
   source: `git clone ${REPO_URL}\ncd plumlang && make`,
-  /** Not published yet: shown as "coming soon", never as working. */
+  /** Homebrew is live; winget is in review (shown as such, never as working). */
   homebrew: "brew install plumlang/tap/plum",
   winget: "winget install Elixpo.Plumlang",
 } as const;

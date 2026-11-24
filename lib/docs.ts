@@ -144,6 +144,7 @@ function sitePage(file: string, slug: string[], section: SectionId, eyebrow: str
 
 const install = sitePage("install.md", ["install"], "start", "Get started");
 const agents = sitePage("agents.md", ["agents"], "reference", "Reference");
+const ecosystem = sitePage("ecosystem.md", ["ecosystem"], "tools", "Tools");
 
 // ---------------------------------------------------------------------------
 // The tour: content/tour/index.md, then NN-slug.md in order.
@@ -431,6 +432,7 @@ export const DOC_PAGES: DocPage[] = [
   stdlibIndex,
   ...stdlibPages,
   ...toolPages,
+  ecosystem,
   ...(referencePage ? [referencePage] : []),
   errorsPage,
   agents,
@@ -457,9 +459,7 @@ export const NAV: NavGroup[] = [
     title: "Standard library",
     items: [stdlibIndex, ...stdlibPages].map((p) => ({ title: p.navTitle, path: p.path })),
   },
-  ...(toolPages.length > 0
-    ? [{ id: "tools" as const, title: "Tools", items: toolPages.map((p) => ({ title: p.navTitle, path: p.path })) }]
-    : []),
+  { id: "tools" as const, title: "Tools", items: [...toolPages, ecosystem].map((p) => ({ title: p.navTitle, path: p.path })) },
   {
     id: "reference",
     title: "Reference",

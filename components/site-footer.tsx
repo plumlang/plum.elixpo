@@ -32,6 +32,7 @@ const columns = [
       { href: RELEASES_URL, label: "Releases" },
       { href: "/playground/", label: "Playground" },
       { href: "/packages/", label: "Packages" },
+      { href: "/docs/ecosystem/", label: "Editors and packages" },
       { href: ROADMAP_URL, label: "Roadmap" },
     ],
   },
