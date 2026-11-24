@@ -67,8 +67,11 @@ To uninstall, delete the install folder.
 
 | Manager | Command | Status |
 |---|---|---|
-| Homebrew | `brew install plumlang/tap/plum` | Coming soon, not published yet |
-| winget | `winget install Elixpo.Plumlang` | Coming soon, not published yet |
+| Homebrew | `brew install plumlang/tap/plum` | Available |
+| winget | `winget install Elixpo.Plumlang` | In review, not available yet |
+
+Editors, highlighting packages and the GitHub Action are listed in
+[Editors and packages](/docs/ecosystem/).
 
 ## Build from source
 

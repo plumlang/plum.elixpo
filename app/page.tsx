@@ -219,7 +219,11 @@ export default function Home() {
           <a href={RELEASES_URL} className="underline underline-offset-4 hover:text-foreground">
             GitHub Releases
           </a>
-          . Homebrew and winget: coming soon.
+          . Homebrew: <code className="font-mono text-[0.9em] text-foreground">brew install plumlang/tap/plum</code>. Editors and packages:{" "}
+          <Link href="/docs/ecosystem/" className="underline underline-offset-4 hover:text-foreground">
+            VS Code, Zed, Tree-sitter, npm and PyPI
+          </Link>
+          .
         </p>
       </StorySection>
 
