@@ -1,3 +1,5 @@
+<p align="center"><img src="public/banner.jpg" alt="Elixpo x Plumlang: a new programming language, built in the open" width="100%"></p>
+
 # plum.elixpo.com
 
 The website and documentation of [Plumlang](https://github.com/plumlang/plumlang),

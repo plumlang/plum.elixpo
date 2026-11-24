@@ -504,7 +504,7 @@ export function neighbours(page: DocPage): { previous?: DocPage; next?: DocPage 
 export const lastModified = (page: DocPage) => (page.source.repo === "plumlang" ? SOURCE_DATE : SITE_CONTENT_DATE);
 
 /** The date the site's own pages (tour, install) were last revised. */
-export const SITE_CONTENT_DATE = "2026-11-15";
+export const SITE_CONTENT_DATE = "2026-11-24";
 
 // ---------------------------------------------------------------------------
 // Links inside the snapshot are written for GitHub: `net.md#tls`,
