@@ -23,7 +23,7 @@ for the other project's maintainers.
 
 | Package | Install | For |
 |---|---|---|
-| [tree-sitter-plum](https://github.com/plumlang/tree-sitter-plum) | `npm install @plumlang/tree-sitter-plum` | The grammar used by Neovim, Helix, Zed and other Tree-sitter tools. |
+| [tree-sitter-plum](https://github.com/plumlang/tree-sitter-plum) | `npm install @plumlang/tree-sitter-plum` | The grammar used by Neovim, Helix, Zed and other Tree-sitter tools; listed in Tree-sitter's [List of parsers](https://github.com/tree-sitter/tree-sitter/wiki/List-of-parsers). |
 | [highlightjs-plum](https://github.com/plumlang/highlightjs-plum) | `npm install @plumlang/highlightjs-plum` | [highlight.js](https://highlightjs.org) on web pages, docs sites and blogs. |
 | [pygments-plum](https://github.com/plumlang/pygments-plum) | `pip install pygments-plum` | [Pygments](https://pygments.org): Sphinx, MkDocs, Jupyter, `pygmentize`. |
 
@@ -57,6 +57,14 @@ see [the WebAssembly guide](/docs/tools/wasm/).
 
 [Orchard](/packages/) is the package index: `plum add <name>` adds a package to
 your project and `plum publish` publishes one.
+
+## Plumlang elsewhere
+
+| Where | What |
+|---|---|
+| [Rosetta Code](https://rosettacode.org/wiki/Category:Plumlang) | Plumlang solutions next to other languages, starting with [Hello world](https://rosettacode.org/wiki/Hello_world/Text#Plumlang) and [FizzBuzz](https://rosettacode.org/wiki/FizzBuzz#Plumlang). |
+| [PLDB](https://pldb.io/concepts/plumlang.html) | The Programming Language DataBase entry. |
+| [Tree-sitter](https://github.com/tree-sitter/tree-sitter/wiki/List-of-parsers) | `tree-sitter-plum` in the official list of parsers. |
 
 ## Install channels
 
