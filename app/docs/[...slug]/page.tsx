@@ -6,6 +6,7 @@ import {
   DOC_PAGES,
   SECTION_TITLES,
   SOURCE,
+  faqEntries,
   getDocPage,
   lastModified,
   markdownPath,
@@ -88,6 +89,21 @@ export default async function DocPageView({ params }: Props) {
         encoding: { "@type": "MediaObject", encodingFormat: "text/markdown", contentUrl: absoluteUrl(markdownPath(page)) },
       },
       breadcrumbList(crumbs),
+      // The FAQ page: its questions and answers, for search and answer engines.
+      ...(page.path === "/docs/faq/"
+        ? [
+            {
+              "@type": "FAQPage",
+              "@id": `${absoluteUrl(page.path)}#faq`,
+              url: absoluteUrl(page.path),
+              mainEntity: faqEntries(page.markdown).map(({ question, answer }) => ({
+                "@type": "Question",
+                name: question,
+                acceptedAnswer: { "@type": "Answer", text: answer },
+              })),
+            },
+          ]
+        : []),
     ],
   };
 

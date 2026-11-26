@@ -143,6 +143,7 @@ function sitePage(file: string, slug: string[], section: SectionId, eyebrow: str
 }
 
 const install = sitePage("install.md", ["install"], "start", "Get started");
+const faq = sitePage("faq.md", ["faq"], "start", "Get started");
 const agents = sitePage("agents.md", ["agents"], "reference", "Reference");
 const ecosystem = sitePage("ecosystem.md", ["ecosystem"], "tools", "Tools");
 
@@ -433,6 +434,7 @@ const tour = tourPages();
 export const DOC_PAGES: DocPage[] = [
   overview,
   install,
+  faq,
   ...tour,
   languageIndex,
   ...specPages,
@@ -452,6 +454,7 @@ export const NAV: NavGroup[] = [
     items: [
       { title: overview.navTitle, path: overview.path },
       { title: install.navTitle, path: install.path },
+      { title: faq.navTitle, path: faq.path },
       { title: "Playground", path: "/playground/" },
     ],
   },
@@ -489,6 +492,7 @@ export const TOUR_PAGES = tour;
 export const ERRORS_PAGE = errorsPage;
 export const AGENTS_PAGE = agents;
 export const INSTALL_PAGE = install;
+export const FAQ_PAGE = faq;
 export const LANGUAGE_INDEX = languageIndex;
 export const STDLIB_INDEX = stdlibIndex;
 export const TOOL_PAGES = toolPages;
@@ -511,7 +515,7 @@ export function neighbours(page: DocPage): { previous?: DocPage; next?: DocPage 
 export const lastModified = (page: DocPage) => (page.source.repo === "plumlang" ? SOURCE_DATE : SITE_CONTENT_DATE);
 
 /** The date the site's own pages (tour, install) were last revised. */
-export const SITE_CONTENT_DATE = "2026-11-24";
+export const SITE_CONTENT_DATE = "2026-11-26";
 
 // ---------------------------------------------------------------------------
 // Links inside the snapshot are written for GitHub: `net.md#tls`,
@@ -556,4 +560,25 @@ export function resolveDocLink(href: string, fromRepoPath: string): string | nul
   // extension and no slash is not a file, so it stays text.
   if (!pathPart.includes(".") && !pathPart.includes("/")) return null;
   return `${REPO_URL}/blob/main/${target}${hash}`;
+}
+
+/**
+ * The questions and answers of a FAQ page (its `## ` headings and the text
+ * under each), as plain text for schema.org FAQPage.
+ */
+export function faqEntries(markdown: string): { question: string; answer: string }[] {
+  const entries: { question: string; answer: string }[] = [];
+  for (const part of markdown.split(/^## /m).slice(1)) {
+    const newline = part.indexOf("\n");
+    const question = part.slice(0, newline).trim();
+    const answer = part
+      .slice(newline + 1)
+      .replace(/```[\s\S]*?```/g, " ")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (question && answer) entries.push({ question, answer });
+  }
+  return entries;
 }
