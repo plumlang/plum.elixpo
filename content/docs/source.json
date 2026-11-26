@@ -1,24 +1,24 @@
 {
   "sourceRepository": "https://github.com/plumlang/plumlang",
-  "sourceCommit": "6a4063ee236ed663009eec87e043c4e2fbf52391",
-  "sourceCommittedAt": "2026-11-24T13:52:03+05:30",
+  "sourceCommit": "9a11cd8128dbc4eee07bac156c2f825f03e280bb",
+  "sourceCommittedAt": "2026-11-27T00:40:46+05:30",
   "dirty": false,
   "files": [
     {
       "path": "docs/spec.md",
-      "sha256": "c6c0e15d6ed1fb1f616570e0a8e2e2196cf5d45d5490c5998fc309a60e1e3ecf"
+      "sha256": "b5cebd0142597c436f408af199561a62f2787c476f3bb753c0ef343264320cc4"
     },
     {
       "path": "docs/errors.md",
-      "sha256": "1409054edfd112795465e2a7dd3bd91fad1c765824c951dbd5ec86c6276c7737"
+      "sha256": "a23973efae2ecacb14f30462c2c6d1e12d88f86a0407fbd9cbe9f55013bac464"
     },
     {
       "path": "docs/reference.md",
-      "sha256": "fc3cbf55ec3eac55546a8c9ade3fa89a0b1272f7bcbdb1796da0c44977b0e140"
+      "sha256": "c101b84448192902531952955ae20c114983e988fe3242be4d6aba54ea587cc1"
     },
     {
       "path": "docs/orchard.md",
-      "sha256": "bdbe1f7e12845fe0f3854df642faf91161b899ec810f237ad3c513e8d516aae3"
+      "sha256": "a0b87da0066f34a51ef46905aec8710cf6c50b13337db6021907916d009aa508"
     },
     {
       "path": "docs/lsp.md",
@@ -181,7 +181,7 @@
     },
     {
       "path": "build/wasm/plum.wasm",
-      "sha256": "2d5061c7689bef5d84ebd60c190c8e042840c98d521773c167adf3ce29efe125",
+      "sha256": "7a4205c809a507c7e13055546a411f94e5826551bc796bb6f904f6dece9cb29e",
       "servedAt": "/playground/plum.wasm"
     }
   ]
