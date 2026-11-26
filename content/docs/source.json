@@ -173,6 +173,16 @@
       "path": "tools/install/install.sh",
       "sha256": "9ff9a1ad65cfbab7b5fa7992fecdc2245ecb9fe359ecdd2138b520b28ecb7b94",
       "servedAt": "/install.sh"
+    },
+    {
+      "path": "build/wasm/plum.js",
+      "sha256": "259b0109e501ab45b68c487b25706e526572073772ea484032ed820357dd45c5",
+      "servedAt": "/playground/plum.js"
+    },
+    {
+      "path": "build/wasm/plum.wasm",
+      "sha256": "7a4205c809a507c7e13055546a411f94e5826551bc796bb6f904f6dece9cb29e",
+      "servedAt": "/playground/plum.wasm"
     }
   ]
 }
