@@ -7,7 +7,7 @@ import { CodeBlock } from "@/components/code-block";
 import { JsonLd } from "@/components/json-ld";
 import { NextLink } from "@/components/next-link";
 import { StoryCard, StorySection } from "@/components/story";
-import { AGENTS_PAGE, ERRORS_PAGE, LANGUAGE_INDEX, REFERENCE_PAGE, STDLIB_INDEX, TOUR_PAGES } from "@/lib/docs";
+import { AGENTS_PAGE, ERRORS_PAGE, FAQ_PAGE, LANGUAGE_INDEX, REFERENCE_PAGE, STDLIB_INDEX, TOUR_PAGES } from "@/lib/docs";
 import { CREATOR_PEOPLE, ORGANIZATION, WEBSITE, pageMetadata } from "@/lib/seo";
 import {
   BENCH_URL,
@@ -62,10 +62,20 @@ export default function Home() {
         "@type": "ComputerLanguage",
         "@id": `${absoluteUrl("/")}#language`,
         name: SITE_NAME,
-        alternateName: "Plum",
+        alternateName: ["Plum", "Plum programming language", "Plum lang"],
         url: absoluteUrl("/"),
         description: SITE_DESCRIPTION,
-        sameAs: [REPO_URL],
+        license: "https://www.apache.org/licenses/LICENSE-2.0",
+        // Every place that describes Plumlang, so search engines connect them.
+        sameAs: [
+          REPO_URL,
+          "https://github.com/plumlang",
+          "https://pldb.io/concepts/plumlang.html",
+          "https://rosettacode.org/wiki/Category:Plumlang",
+          "https://marketplace.visualstudio.com/items?itemName=plum-lang.plum-lang",
+          "https://open-vsx.org/extension/plum-lang/plum-lang",
+          "https://www.npmjs.com/package/@plumlang/plumlang",
+        ],
         creator: CREATOR_PEOPLE,
         publisher: { "@id": ORGANIZATION["@id"] },
       },
@@ -78,6 +88,7 @@ export default function Home() {
           "The plum command: the Plumlang compiler, virtual machine and standard library in one binary with no dependencies.",
         applicationCategory: "DeveloperApplication",
         operatingSystem: "Linux, macOS, Windows",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
         url: absoluteUrl("/"),
         downloadUrl: RELEASES_URL,
         installUrl: absoluteUrl("/docs/install/"),
@@ -103,7 +114,7 @@ export default function Home() {
           <div>
             <p className="font-mono text-[0.68rem] font-medium uppercase tracking-[0.19em] text-primary">Programming language</p>
             <h1 id="what-title" className="mt-5 text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-balance sm:text-6xl lg:text-7xl">
-              A small, fast, <em className="font-serif font-normal tracking-[-0.02em]">memory-safe</em> programming language.
+              Plumlang: a small, fast, <em className="font-serif font-normal tracking-[-0.02em]">memory-safe</em> programming language.
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
               Static types, objects, modules, tasks and an HTTP server, compiled to bytecode and run by one{" "}
@@ -116,10 +127,14 @@ export default function Home() {
               </NextLink>
             </div>
             <p className="mt-9 font-mono text-xs text-muted-foreground">
-              Pre-alpha, built in the open ·{" "}
+              Early access, built in the open ·{" "}
               <a href={ROADMAP_URL} className="underline underline-offset-4 hover:text-foreground">
                 roadmap
               </a>{" "}
+              ·{" "}
+              <Link href={FAQ_PAGE.path} className="underline underline-offset-4 hover:text-foreground">
+                FAQ
+              </Link>{" "}
               · <span className="text-production">An Elixpo production</span>
             </p>
           </div>
